@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace VecEdit2D
@@ -13,32 +14,54 @@ namespace VecEdit2D
     public interface IVectorFigure
     {
 
-      //  void Draw(Canvas canvas, double x, double y, double dx, double dy);
+        //  void Draw(Canvas canvas, double x, double y, double dx, double dy);
     }
 
-    abstract class Fig2D : IVectorFigure
+    public abstract class Shape
     {
-        double x;
-        double y;
-        double dx;
-        double dy;
+        public Brushes Color { get; set; }
+        public Brushes StrokeColor { get; set; }
+        public int StrokeThickness { get; set; }
 
-        protected Fig2D()
+        public Shape(Shape source)
         {
-
+            this.Color = source.Color;
+            this.StrokeThickness = source.StrokeThickness;
+            this.StrokeColor = source.StrokeColor;
         }
 
-      /*  void Draw(Canvas canvas, double x, double y, double dx, double dy)
-        {
-            Canvas.SetLeft(ellipse, x);
-            Canvas.SetTop(ellipse, y);
-
-            canvas.Children.Add(ellipse);
-        }*/
+        public abstract Shape Clone();
     }
 
-    class Ellipse : Fig2D
+    public class Rectangle : Shape
     {
+        public int Width { get; set; }
+        public int Height { get; set; }
 
+        public Rectangle(Rectangle source) : base(source)
+        {
+            this.Width = source.Width;
+            this.Height = source.Height;
+        }
+
+        public override Shape Clone()
+        {
+            return new Rectangle(this);
+        }
+    }
+
+    public class Circle : Shape
+    {
+        public int Radius { get; set; }
+
+        public Circle(Circle source) : base(source)
+        {
+            this.Radius = source.Radius;
+        }
+
+        public override Shape Clone()
+        {
+            return new Circle(this);
+        }
     }
 }
