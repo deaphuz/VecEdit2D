@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,58 +16,78 @@ using System.Windows.Shapes;
 
 namespace VecEdit2D
 {
-
-
-
-
-
-    // Concrete flyweight class
-    class Circle : IVectorFigure
-    {
-        private Brush brush;
-
-        public Circle(Color color)
-        {
-            this.brush = new SolidColorBrush(color);
-        }
-
-        public void Draw(Canvas canvas, double x, double y, double dx, double dy)
-        {
-            Ellipse ellipse = new Ellipse
-            {
-                w = dx,
-                h = dy,
-                Fill = brush
-            };
-
-
-        }
-    }
-
     // Main window
     public partial class MainWindow : Window
     {
-        private List<IVectorFigure> figures;
+        private Toolbox toolboxInstance;
+        Brush customColor;
+        Random r = new Random();
+        
 
         public MainWindow()
         {
-            InitializeComponent();
-            figures = new List<IVectorFigure>();
+            toolboxInstance = Toolbox.Instance;
+            toolboxInstance.Show();
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void AddShape(object sender, MouseButtonEventArgs e)
         {
-            IVectorFigure circle = new Circle(Colors.Blue); // You can create different figure types
-            figures.Add(circle);
-            DrawCanvas();
-        }
-
-        private void DrawCanvas()
-        {
-            MainCanvas.Children.Clear();
-            foreach (var figure in figures)
+            if (e.OriginalSource is System.Windows.Shapes.Shape)
             {
-                figure.Draw(MainCanvas, 0, 0);
+                System.Windows.Shapes.Shape activeRectangle = (System.Windows.Shapes.Shape)e.OriginalSource;
+                MainCanvas.Children.Remove(activeRectangle);
+            }
+            else
+            {
+                customColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 255))); 
+                System.Windows.Shapes.Shape newShape = new Polyline();
+                switch (toolboxInstance.Shape)
+                {
+                    case "circle":
+                        newShape = new System.Windows.Shapes.Ellipse()
+                        {
+                            Height = toolboxInstance.Radius,
+                            Width = toolboxInstance.Radius,
+                            Fill = customColor,
+                            StrokeThickness = toolboxInstance.StrokeThickness,
+                            Stroke = Brushes.Black
+                        };
+                        break;
+                    case "triangle":
+                        newShape = new System.Windows.Shapes.Path()
+                        {
+                            Width = 50,
+                            Height = 50,
+                            Fill = customColor,
+                            StrokeThickness = 3,
+                            Stroke = Brushes.Black
+                        };
+                        break;
+                    case "rectangle":
+                        newShape = new System.Windows.Shapes.Rectangle
+                        {
+                            Width = toolboxInstance.Width,
+                            Height = toolboxInstance.Height,
+                            Fill = customColor,
+                            StrokeThickness = toolboxInstance.StrokeThickness,
+                            Stroke = Brushes.Black
+                        };
+                        break;
+                    case "straightLine":
+                        newShape = new System.Windows.Shapes.Line()
+                        {
+                            Width = 50,
+                            Height = 50,
+                            Fill = customColor,
+                            StrokeThickness = 3,
+                            Stroke = Brushes.Black
+                        };
+                        break;
+                }
+                Canvas.SetLeft(newShape, Mouse.GetPosition(MainCanvas).X - newShape.Width/2);
+                Canvas.SetTop(newShape, Mouse.GetPosition(MainCanvas).Y - newShape.Height/2);
+
+                MainCanvas.Children.Add(newShape);
             }
         }
     }

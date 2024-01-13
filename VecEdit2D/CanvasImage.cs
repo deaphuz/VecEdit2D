@@ -13,27 +13,7 @@ namespace VecEdit2D
 {
     public class CanvasImage
     {
-        Canvas c;
-        List<IVectorFigure> shapes;
-        public CanvasImage() {
-            shapes = new List<IVectorFigure>();
-        }
- 
-        void addShape(IVectorFigure shape)
-        {
-            shapes.Add(shape);
-        }
-
-        void Draw()
-        {
-            foreach (IVectorFigure shape in shapes)
-            {
-                Canvas.SetLeft(ellipse, x);
-                Canvas.SetTop(ellipse, y);
-
-                c.Children.Add(ellipse);
-            }
-        }
+       
        
     }
 }

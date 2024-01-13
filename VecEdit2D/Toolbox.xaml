@@ -1,0 +1,42 @@
+﻿<Window x:Class="VecEdit2D.Toolbox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VecEdit2D"
+        mc:Ignorable="d"
+        Title="Toolbox" Height="950" Width="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <Button Content="Straight Line" Click="StraightLine_Click"/>
+            <Button Content="Triangle" Click="Triangle_Click"/>
+            <Button Content="Circle" Click="Circle_Click"/>
+            <Button Content="Rectangle" Click="Rectangle_Click"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="StrokeThickness:" Margin="5,10,0,0"/>
+            <TextBox x:Name="StrokeThicknessTextBox" TextChanged="StrokeThicknessEventHandler" Text="3" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="WidthTextBlock" Text="Width:" Margin="5,10,0,0"/>
+            <TextBox x:Name="WidthTextBox" TextChanged="WidthEventHandler" Text="50" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
+            <TextBlock x:Name="RadiusTextBlock" Text="Radius:" Margin="5,10,0,0"/>
+            <TextBox x:Name="RadiusTextBox" TextChanged="RadiusEventHandler" Text="50" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
+            <TextBlock x:Name="HeightTextBlock" Text="Height:" Margin="5,40,0,0"/>
+            <TextBox x:Name="HeightTextBox" TextChanged="HeightEventHandler" Text="50" Width="50" Margin="0,40,0,0" Grid.Column="1" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</Window>
