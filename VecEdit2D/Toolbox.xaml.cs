@@ -61,6 +61,16 @@ namespace VecEdit2D
             Shape = "rectangle";
             SetControlsVisibility(true, true, false);
         }
+
+        private void TextBox_Click(object sender, RoutedEventArgs e)
+        {
+            Shape = "textBox";
+        }
+
+        private void Polygon_Click(object sender, RoutedEventArgs e)
+        {
+            Shape = "polygon";
+        }
         private void StrokeThicknessEventHandler(object sender, TextChangedEventArgs args)
         {
             StrokeThickness = double.Parse(StrokeThicknessTextBox.Text);

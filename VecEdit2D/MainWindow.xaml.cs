@@ -20,41 +20,98 @@ namespace VecEdit2D
     public partial class MainWindow : Window
     {
         private Toolbox toolboxInstance;
+        private ContextMenu contextMenuInstance;
         Brush customColor;
         Random r = new Random();
-        
+
+        List<Group> canvas;
+
+        List<Point> points;
 
         public MainWindow()
         {
             toolboxInstance = Toolbox.Instance;
+           // contextMenu = ContextMenu.Instance;
             toolboxInstance.Show();
+            canvas = new List<Group>();
         }
 
-        private void AddShape(object sender, MouseButtonEventArgs e)
+        private void HandleLMBClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is System.Windows.Shapes.Shape)
+            if (e.OriginalSource is Shape)
             {
-                System.Windows.Shapes.Shape activeRectangle = (System.Windows.Shapes.Shape)e.OriginalSource;
+                Shape activeRectangle = (Shape)e.OriginalSource;
                 MainCanvas.Children.Remove(activeRectangle);
             }
             else
             {
-                customColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 255))); 
-                System.Windows.Shapes.Shape newShape = new Polyline();
+                customColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 255)));
+                points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
                 switch (toolboxInstance.Shape)
                 {
                     case "circle":
-                        newShape = new System.Windows.Shapes.Ellipse()
+                        if (points.Count == 1)
                         {
-                            Height = toolboxInstance.Radius,
-                            Width = toolboxInstance.Radius,
-                            Fill = customColor,
-                            StrokeThickness = toolboxInstance.StrokeThickness,
-                            Stroke = Brushes.Black
-                        };
+                            ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30);
+                            canvas.Add(newShape);
+                            Ellipse figure = newShape.getWPFFigure();
+                            MainCanvas.Children.Add(figure);
+                            Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
+                            Canvas.SetTop(figure, newShape.center.Y - newShape.getWPFRadius());
+                        }
+                        else if (points.Count > 1)
+                            points = new List<Point>();
                         break;
-                    case "triangle":
-                        newShape = new System.Windows.Shapes.Path()
+
+
+                    case "rectangle":
+                        if(points.Count == 2)
+                        {
+
+                        }
+                        else if (points.Count > 2)
+                            points = new List<Point>();
+                        break;
+                }
+        }
+
+        private void HandleRMBClick(object sender, MouseButtonEventArgs e)
+        {
+            //TODO show popup menu
+        }
+
+        private void AddShape(object sender, MouseButtonEventArgs e)
+        {
+            if (e.OriginalSource is Shape)
+            {
+                Shape activeRectangle = (Shape)e.OriginalSource;
+                MainCanvas.Children.Remove(activeRectangle);
+            }
+            else
+            {
+                
+                // new Polyline();
+                switch (toolboxInstance.Shape)
+                {
+                    case "circle":
+                        ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30);
+                        canvas.Add(newShape);
+                        Ellipse figure = newShape.getWPFFigure();
+                        MainCanvas.Children.Add(figure);
+                        Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
+                        Canvas.SetTop(figure, newShape.center.Y - newShape.getWPFRadius());
+                        // canvas.Add(new ShapeCircle(30));
+                        /*  newShape = new System.Windows.Shapes.Ellipse
+                          {
+                              Height = toolboxInstance.Radius,
+                              Width = toolboxInstance.Radius,
+                              Fill = customColor,
+                              StrokeThickness = toolboxInstance.StrokeThickness,
+                              Stroke = Brushes.Black
+                          };*/
+                        break;
+                  /*  case "triangle":
+                        newShape = new System.Windows.Shapes.Path
                         {
                             Width = 50,
                             Height = 50,
@@ -74,7 +131,7 @@ namespace VecEdit2D
                         };
                         break;
                     case "straightLine":
-                        newShape = new System.Windows.Shapes.Line()
+                        newShape = new System.Windows.Shapes.Line
                         {
                             Width = 50,
                             Height = 50,
@@ -82,13 +139,18 @@ namespace VecEdit2D
                             StrokeThickness = 3,
                             Stroke = Brushes.Black
                         };
-                        break;
+                        break;*/
                 }
-                Canvas.SetLeft(newShape, Mouse.GetPosition(MainCanvas).X - newShape.Width/2);
+            /*    Canvas.SetLeft(newShape, Mouse.GetPosition(MainCanvas).X - newShape.Width/2);
                 Canvas.SetTop(newShape, Mouse.GetPosition(MainCanvas).Y - newShape.Height/2);
 
-                MainCanvas.Children.Add(newShape);
+                MainCanvas.Children.Add(newShape);*/
             }
+        }
+
+        private void ShowPopupMenu(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
