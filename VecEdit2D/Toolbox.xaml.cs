@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,7 +20,9 @@ namespace VecEdit2D
     {
         //Singleton
         private static Toolbox _instance;
-        public string Shape { get; set; }
+        public string currentShape { get; set; }
+        public System.Windows.Media.Color primaryColor { get; set; }
+        public System.Windows.Media.Color secondaryColor { get; set; }
         public double StrokeThickness { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
@@ -40,37 +44,41 @@ namespace VecEdit2D
             }
         }
 
+        private void Group_Click(object sender, RoutedEventArgs e)
+        {
+            currentShape = "group";
+        }
         private void StraightLine_Click(object sender, RoutedEventArgs e)
         {
-            Shape = "straightLine";
+            currentShape = "straightLine";
         }
 
-        private void Triangle_Click(object sender, RoutedEventArgs e)
+        private void Polygon_Click(object sender, RoutedEventArgs e)
         {
-            Shape = "triangle";
+            currentShape = "polygon";
+        }
+        private void MultiLine_Click(object sender, RoutedEventArgs e)
+        {
+            currentShape = "polyline";
         }
 
         private void Circle_Click(object sender, RoutedEventArgs e)
         {
-            Shape = "circle";
+            currentShape = "circle";
             SetControlsVisibility(false, false, true);
         }
 
         private void Rectangle_Click(object sender, RoutedEventArgs e)
         {
-            Shape = "rectangle";
+            currentShape = "rectangle";
             SetControlsVisibility(true, true, false);
         }
 
-        private void TextBox_Click(object sender, RoutedEventArgs e)
+        private void TextArea_Click(object sender, RoutedEventArgs e)
         {
-            Shape = "textBox";
+            currentShape = "textarea";
         }
 
-        private void Polygon_Click(object sender, RoutedEventArgs e)
-        {
-            Shape = "polygon";
-        }
         private void StrokeThicknessEventHandler(object sender, TextChangedEventArgs args)
         {
             StrokeThickness = double.Parse(StrokeThicknessTextBox.Text);
@@ -87,6 +95,30 @@ namespace VecEdit2D
         {
             Radius = double.Parse(RadiusTextBox.Text);
         }
+
+        private void PrimaryColor_Click(object sender, RoutedEventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+
+            if(colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.Drawing.Color SWDColor = colorDialog.Color;
+                primaryColor = System.Windows.Media.Color.FromArgb(SWDColor.A, SWDColor.R, SWDColor.G, SWDColor.B);
+                primaryColorRect.Fill = new SolidColorBrush(primaryColor);
+            }
+        }
+        private void SecondaryColor_Click(object sender, RoutedEventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+
+            if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                System.Drawing.Color SWDColor = colorDialog.Color;
+                secondaryColor = System.Windows.Media.Color.FromArgb(SWDColor.A, SWDColor.R, SWDColor.G, SWDColor.B);
+                secondaryColorRect.Fill = new SolidColorBrush(secondaryColor);
+            }
+        }
+
         private void SetControlsVisibility(bool widthVisible, bool heightVisible, bool radiusVisible)
         {
             WidthTextBlock.Visibility = widthVisible ? Visibility.Visible : Visibility.Collapsed;

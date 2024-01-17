@@ -21,7 +21,9 @@ namespace VecEdit2D
         private GroupView()
         {
             InitializeComponent();
-           // SetControlsVisibility(false, false, false);
+          //  DataContext = new TreeViewModel();
+
+            // SetControlsVisibility(false, false, false);
         }
 
     }
