@@ -85,6 +85,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\Globals.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="ShapeGroups\ShapeCircle.cs" />
     <Compile Include="ShapeGroups\ShapeGroup.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="ShapeGroups\ShapePolygon.cs" />
     <Compile Include="ShapeGroups\ShapePolyline.cs" />
     <Compile Include="ShapeGroups\ShapeRectangle.cs" />
+    <Compile Include="AppState.cs" />
     <Compile Include="Utils\PointHelper.cs" />
     <Compile Include="GroupView.xaml.cs">
       <DependentUpon>GroupView.xaml</DependentUpon>

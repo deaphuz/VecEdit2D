@@ -21,21 +21,27 @@ namespace VecEdit2D
     public partial class MainWindow : Window
     {
         private Toolbox toolboxInstance;
-        //private ContextMenu contextMenuInstance;
-        Brush customColor;
-        Random r = new Random();
-        Image image;
+        private GroupView groupViewInstance;
+        private AppState appStateInstance;
+        private Image refImage;
 
-        List<Point> points;
+        private List<Point> points;
+
+        public ShapeGroup refSelectedShapeGroup;
 
         public MainWindow()
         {
+            InitializeComponent();
             toolboxInstance = Toolbox.Instance;
-           // contextMenu = ContextMenu.Instance;
             toolboxInstance.Show();
-            canvas = new List<Group>();
-            image = new Image();
+            groupViewInstance = GroupView.Instance;
+            groupViewInstance.Show();
+            appStateInstance = AppState.Instance;
+            refImage = Image.Instance;
             points = new List<Point>();
+
+            appStateInstance.
+            refSelectedShapeGroup = refImage.canvas;
 
         }
 
@@ -48,7 +54,6 @@ namespace VecEdit2D
             }
             else
             {
-                customColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 255)));
                 points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
                 switch (toolboxInstance.currentShape)
                 {
@@ -56,7 +61,7 @@ namespace VecEdit2D
                         if (points.Count == 1)
                         {
                             ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            canvas.Add(newShape);
+                            refSelectedShapeGroup.childGroups.Add(newShape);
                             Ellipse figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
@@ -72,7 +77,7 @@ namespace VecEdit2D
                         if (points.Count == 2)
                         {
                             ShapeRectangle newShape = new ShapeRectangle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            canvas.Add(newShape);
+                            refSelectedShapeGroup.childGroups.Add(newShape);
                             Polygon figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             //Canvas.SetLeft(figure, newShape.center.X);
@@ -86,7 +91,7 @@ namespace VecEdit2D
                         if (points.Count == 2)
                         {
                             ShapeLine newShape = new ShapeLine(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            canvas.Add(newShape);
+                            refSelectedShapeGroup.childGroups.Add(newShape);
                             Line figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             //Canvas.SetLeft(figure, newShape.center.X);
@@ -98,6 +103,7 @@ namespace VecEdit2D
                         break;
                 }
             }
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void HandleRMBClick(object sender, MouseButtonEventArgs e)
@@ -111,7 +117,7 @@ namespace VecEdit2D
                         case "polygon":
                         {
                             ShapePolygon newShape = new ShapePolygon(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            canvas.Add(newShape);
+                            refSelectedShapeGroup.childGroups.Add(newShape);
                             Polygon figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                                 //Canvas.SetLeft(figure, newShape.center.X);
@@ -124,7 +130,7 @@ namespace VecEdit2D
                         case "polyline":
                         {
                             ShapePolyline newShape = new ShapePolyline(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            canvas.Add(newShape);
+                            refSelectedShapeGroup.childGroups.Add(newShape);
                             Polyline figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                                 //Canvas.SetLeft(figure, newShape.center.X);
@@ -209,6 +215,69 @@ namespace VecEdit2D
         }*/
 
         private void ShowPopupMenu(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void TranslateItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RotateItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ScaleItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetColorItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetOutlineItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RemoveFillingItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void RemoveOutlineItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void RemoveFigureItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void RemoveFigureItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void NewFileItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OpenFileItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveFileItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void QuitItem_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -8,18 +8,35 @@
         Title="MainWindow" Height="950" Width="1200">
     <Window.Resources>
         <ContextMenu x:Key="CanvasContextMenu">
-            <MenuItem Header="Translate" Click="MenuItem1_Click"/>
-            <MenuItem Header="Rotate" Click="MenuItem1_Click"/>
-            <MenuItem Header="Scale" Click="MenuItem2_Click"/>
-            <MenuItem Header="Set color" Click="MenuItem2_Click"/>
-            <MenuItem Header="Set outline" Click="MenuItem2_Click"/>
+            <MenuItem Header="Translate" Click="TranslateItem_Click"/>
+            <MenuItem Header="Rotate" Click="RotateItem_Click"/>
+            <MenuItem Header="Scale" Click="ScaleItem_Click"/>
+            <MenuItem Header="Set color" Click="SetColorItem_Click"/>
+            <MenuItem Header="Set outline" Click="SetOutlineItem_Click"/>
             <Separator />
-            <MenuItem Header="Remove filling" Click="MenuItem2_Click"/>
-            <MenuItem Header="Remove outline" Click="MenuItem2_Click"/>
+            <MenuItem Header="Remove filling" Click="RemoveFillingItem_Click"/>
+            <MenuItem Header="Remove outline" Click="RemoveOutlineItem_Click"/>
             <Separator />
-            <MenuItem Header="Remove figure" Click="MenuItem2_Click"/>
+            <MenuItem Header="Remove figure" Click="RemoveFigureItem_Click"/>
 
         </ContextMenu>
     </Window.Resources>
-    <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" Focusable="True" Margin="0,0,0,0"/>
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top" FontSize="14">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Click="NewFileItem_Click" />
+                <MenuItem Header="_Read"  Click="ReadFileItem_Click"/>
+                <MenuItem Header="_Save" Click="SaveFileItem_Click"/>
+                <Separator />
+                <MenuItem Header="_Quit" Click="QuitItem_Click" />
+            </MenuItem>
+        </Menu>
+        <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" Focusable="True" Margin="0,0,0,0"/>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="statusText" />
+            </StatusBarItem>
+        </StatusBar>
+    </DockPanel>
+    
 </Window>

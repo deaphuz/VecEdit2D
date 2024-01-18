@@ -9,7 +9,8 @@ using System.Windows.Media;
 using System.Windows;
 
 namespace VecEdit2D
-{
+{   
+    
     //Composite
     public interface Group
     {
@@ -26,7 +27,8 @@ namespace VecEdit2D
     [Serializable]
     public class ShapeGroup : Group
     {
-        public List<Group> childGroups;
+        public List<ShapeGroup> childGroups;
+        public string name;
 
         //for scaling and rotating
         //group, has x and y
@@ -41,11 +43,12 @@ namespace VecEdit2D
         [JsonConstructor]
         public ShapeGroup(double centerx, double centery, Color primary, Color secondary)
         {
-            childGroups = new List<Group>();
+            childGroups = new List<ShapeGroup>();
             center.X = centerx;
             center.Y = centery;
             Color = primary;
             StrokeColor = secondary;
+            name = "Ksztalt " + ++Globals.ShapeID;
         }
 
         //TODO NEW CONSTRUCTORS

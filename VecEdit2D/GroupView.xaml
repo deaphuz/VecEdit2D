@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VecEdit2D"
         mc:Ignorable="d"
-        Title="Grupy" Height="950" Width="200">
-        <Grid>
-            <TreeView Name="LayersView" ItemsSource="{Binding RootNodes}">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Name}"/>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-        </Grid>
+        Title="Toolbox" Height="950" Width="200">
+    <Grid>
+        <TreeView Name="LayersView" ItemsSource="{Binding DataContext}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding name}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
 </Window>
