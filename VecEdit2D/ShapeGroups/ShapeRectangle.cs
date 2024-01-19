@@ -31,8 +31,8 @@ namespace VecEdit2D
             double centerY = (p1.Y + p2.Y + p3.Y + p4.Y) / 4;
 
             center = new Point(centerX, centerY);
-            Color = primary;
-            StrokeColor = secondary;
+            color = primary;
+            strokeColor = secondary;
 
 
         }
@@ -41,8 +41,8 @@ namespace VecEdit2D
         {
             return new Polygon
             {
-                Stroke = new SolidColorBrush(StrokeColor),
-                Fill = new SolidColorBrush(Color),
+                Stroke = new SolidColorBrush(strokeColor),
+                Fill = new SolidColorBrush(color),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
                 Points = new PointCollection { p1, p2, p3, p4 },
@@ -72,6 +72,15 @@ namespace VecEdit2D
             p2 = PointHelper.Scale(p2, scaleCenter, sx, sy);
             p3 = PointHelper.Scale(p3, scaleCenter, sx, sy);
             p4 = PointHelper.Scale(p4, scaleCenter, sx, sy);
+        }
+
+        public override ShapeGroup find(string name)
+        {
+            if (this.name == name)
+            {
+                return this;
+            }
+            return null;
         }
     }
 }

@@ -85,6 +85,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utils\Serializer.cs" />
     <Compile Include="Utils\Globals.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="ShapeGroups\ShapeCircle.cs" />
@@ -100,6 +101,9 @@
     </Compile>
     <Compile Include="Toolbox.xaml.cs">
       <DependentUpon>Toolbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InputDialog.xaml.cs">
+      <DependentUpon>InputDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +122,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Toolbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -151,7 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GroupView\" />
-    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,8 +25,8 @@ namespace VecEdit2D
         {
             return new Ellipse
             {
-                Stroke = new SolidColorBrush(StrokeColor),
-                Fill = new SolidColorBrush(Color),
+                Stroke = new SolidColorBrush(strokeColor),
+                Fill = new SolidColorBrush(color),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
                 Width = 2 * r,
@@ -51,6 +51,15 @@ namespace VecEdit2D
         {
             center = PointHelper.Scale(center, scaleCenter, sx, sy);
             r *= (sx + sy) / 2;
+        }
+
+        public override ShapeGroup find(string name)
+        {
+            if (this.name == name)
+            {
+                return this;
+            }
+            return null;
         }
     }
 }

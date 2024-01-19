@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -40,8 +41,8 @@ namespace VecEdit2D
             refImage = Image.Instance;
             points = new List<Point>();
 
-            appStateInstance.
-            refSelectedShapeGroup = refImage.canvas;
+            appStateInstance.refSelectedShapeGroup = refImage.canvas;
+
 
         }
 
@@ -61,7 +62,7 @@ namespace VecEdit2D
                         if (points.Count == 1)
                         {
                             ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            refSelectedShapeGroup.childGroups.Add(newShape);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             Ellipse figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
@@ -77,7 +78,7 @@ namespace VecEdit2D
                         if (points.Count == 2)
                         {
                             ShapeRectangle newShape = new ShapeRectangle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            refSelectedShapeGroup.childGroups.Add(newShape);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             Polygon figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             //Canvas.SetLeft(figure, newShape.center.X);
@@ -91,7 +92,7 @@ namespace VecEdit2D
                         if (points.Count == 2)
                         {
                             ShapeLine newShape = new ShapeLine(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            refSelectedShapeGroup.childGroups.Add(newShape);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             Line figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                             //Canvas.SetLeft(figure, newShape.center.X);
@@ -117,7 +118,7 @@ namespace VecEdit2D
                         case "polygon":
                         {
                             ShapePolygon newShape = new ShapePolygon(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            refSelectedShapeGroup.childGroups.Add(newShape);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             Polygon figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                                 //Canvas.SetLeft(figure, newShape.center.X);
@@ -130,7 +131,7 @@ namespace VecEdit2D
                         case "polyline":
                         {
                             ShapePolyline newShape = new ShapePolyline(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            refSelectedShapeGroup.childGroups.Add(newShape);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             Polyline figure = newShape.getWPFFigure();
                             MainCanvas.Children.Add(figure);
                                 //Canvas.SetLeft(figure, newShape.center.X);
@@ -142,106 +143,58 @@ namespace VecEdit2D
                         default:
                             break;
                     }
-
-                        //if its polyline or polygon, draw it
+                    //e.Handled = true;
+                    //if its polyline or polygon, draw it
                 }
             }
-        }
-        /*
-        private void AddShape(object sender, MouseButtonEventArgs e)
-        {
-            if (e.OriginalSource is Shape)
+            else //if there are no points, show contextmenu
             {
-                Shape activeRectangle = (Shape)e.OriginalSource;
-                MainCanvas.Children.Remove(activeRectangle);
+                ShowContextMenu();
+               // e.Handled = true;
             }
-            else
-            {
-                switch (toolboxInstance.Shape)
-                {
-                    case "circle":
-                        ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30);
-                        canvas.Add(newShape);
-                        Ellipse figure = newShape.getWPFFigure();
-                        MainCanvas.Children.Add(figure);
-                        Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
-                        Canvas.SetTop(figure, newShape.center.Y - newShape.getWPFRadius());
-                        // canvas.Add(new ShapeCircle(30));
-                        /*  newShape = new System.Windows.Shapes.Ellipse
-                          {
-                              Height = toolboxInstance.Radius,
-                              Width = toolboxInstance.Radius,
-                              Fill = customColor,
-                              StrokeThickness = toolboxInstance.StrokeThickness,
-                              Stroke = Brushes.Black
-                          };
-                        break;
-                  /*  case "triangle":
-                        newShape = new System.Windows.Shapes.Path
-                        {
-                            Width = 50,
-                            Height = 50,
-                            Fill = customColor,
-                            StrokeThickness = 3,
-                            Stroke = Brushes.Black
-                        };
-                        break;
-                    case "rectangle":
-                        newShape = new System.Windows.Shapes.Rectangle
-                        {
-                            Width = toolboxInstance.Width,
-                            Height = toolboxInstance.Height,
-                            Fill = customColor,
-                            StrokeThickness = toolboxInstance.StrokeThickness,
-                            Stroke = Brushes.Black
-                        };
-                        break;
-                    case "straightLine":
-                        newShape = new System.Windows.Shapes.Line
-                        {
-                            Width = 50,
-                            Height = 50,
-                            Fill = customColor,
-                            StrokeThickness = 3,
-                            Stroke = Brushes.Black
-                        };
-                        break;
-                }
-                Canvas.SetLeft(newShape, Mouse.GetPosition(MainCanvas).X - newShape.Width/2);
-                Canvas.SetTop(newShape, Mouse.GetPosition(MainCanvas).Y - newShape.Height/2);
-
-                MainCanvas.Children.Add(newShape);
-            }
-        }*/
-
-        private void ShowPopupMenu(object sender, MouseButtonEventArgs e)
-        {
-
         }
+
+
+        private void ShowContextMenu()
+        {
+            Point position = Mouse.GetPosition(MainCanvas);
+            ContextMenu.PlacementTarget = MainCanvas;
+            ContextMenu.Placement = PlacementMode.MousePoint;
+            ContextMenu.IsOpen = true;
+            
+        }
+
+        //contextmenu item handlers
 
         private void TranslateItem_Click(object sender, EventArgs e)
         {
+            appStateInstance.refSelectedShapeGroup.translate(10, 10);
+            groupViewInstance._Update(refImage.canvas);
 
         }
 
         private void RotateItem_Click(object sender, EventArgs e)
         {
-
+            appStateInstance.refSelectedShapeGroup.rotate(100, appStateInstance.refSelectedShapeGroup.center);
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void ScaleItem_Click(object sender, EventArgs e)
         {
-
+            appStateInstance.refSelectedShapeGroup.scale(1.2, 1.2, appStateInstance.refSelectedShapeGroup.center);
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void SetColorItem_Click(object sender, EventArgs e)
         {
-
+            appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 0, 0, 255));
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void SetOutlineItem_Click(object sender, EventArgs e)
         {
-
+            appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 255, 0, 255));
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void RemoveFillingItem_Click(object sender, EventArgs e)
@@ -257,17 +210,15 @@ namespace VecEdit2D
         {
 
         }
-        private void RemoveFigureItem_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
+        //file new/read/save
 
         private void NewFileItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void OpenFileItem_Click(object sender, RoutedEventArgs e)
+        private void ReadFileItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -279,7 +230,7 @@ namespace VecEdit2D
 
         private void QuitItem_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

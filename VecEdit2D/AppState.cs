@@ -13,7 +13,7 @@ namespace VecEdit2D
         private static AppState _instance;
 
         public int ShapeID;
-        public ShapeGroup canvas { get; set; }
+        public ShapeGroup refSelectedShapeGroup { get; set; }
         private AppState()
         {
             ShapeID = 0;

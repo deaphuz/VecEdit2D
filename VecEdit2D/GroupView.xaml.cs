@@ -8,20 +8,26 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using VecEdit2D.Views;
 
 namespace VecEdit2D
 {
     public partial class GroupView : Window
     {
         private static GroupView _instance;
+        private ShapeGroup selectedPreviousItem;
+        private Style treeViewItemStyle;
         private GroupView()
         {
             InitializeComponent();
-            //  DataContext = Image.Instance.WPFobservableCanvas;
+            treeViewItemStyle = new Style(typeof(TreeViewItem));
+            treeViewItemStyle.Setters.Add(new EventSetter(TreeViewItem.PreviewMouseRightButtonDownEvent, new MouseButtonEventHandler(TreeItem_RMBClick)));
+
         }
         public static GroupView Instance
         {
@@ -33,11 +39,6 @@ namespace VecEdit2D
                 }
                 return _instance;
             }
-        }
-
-        public void Clear()
-        {
-            LayersView.Items.Clear();
         }
 
         public void _Update(ShapeGroup mainCanvas)
@@ -52,13 +53,19 @@ namespace VecEdit2D
             {
                 Header = item.name,
                 Tag = item, //its only a reference  : )
+                IsExpanded = true,
+                ItemContainerStyle = treeViewItemStyle,
 
             };
             treeItem.Selected += TreeItem_Selected;
-            foreach (var shapeGroup in item.childGroups)
+            if(item.childGroups != null) //!!!
             {
-                treeItem.Items.Add(Update(shapeGroup));
+                foreach (var shapeGroup in item.childGroups)
+                {
+                    treeItem.Items.Add(Update(shapeGroup));
+                }
             }
+
             return treeItem;
         }
 
@@ -67,14 +74,52 @@ namespace VecEdit2D
             // Get the selected TreeViewItem
             if (sender is TreeViewItem selectedItem)
             {
-                ShapeGroup foundedShapeGroup = 
-                refSelectedShapeGroup
-                selectedItem.Name
-                // Access the associated ShapeGroup using the Tag property
-                if (selectedItem.Tag is ShapeGroup selectedShapeGroup)
+                if (selectedItem.IsSelected)
                 {
-                    // Do something with the selected ShapeGroup
-                    MessageBox.Show($"Selected: {selectedShapeGroup.name}");
+                    selectedPreviousItem = AppState.Instance.refSelectedShapeGroup;
+                    ShapeGroup foundedShapeGroup = selectedItem.Tag as ShapeGroup;
+                    AppState.Instance.refSelectedShapeGroup = foundedShapeGroup;
+
+                    /*
+                    if (selectedItem.Tag is ShapeGroup selectedShapeGroup)
+                    {
+                        MessageBox.Show($"Selected: {selectedItem.name}");
+                    }*/
+                }
+            }
+        }
+
+        private void TreeItem_RMBClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                // Get the TreeViewItem that was right-clicked
+                if (sender is TreeViewItem clickedItem)
+                {
+                    if (clickedItem.IsSelected)
+                    {
+
+                        // Access the associated ShapeGroup using the Tag property
+                        if (clickedItem.Tag is ShapeGroup selectedShapeGroup)
+                        {
+                            var changeNameDialog = new InputDialog("Info", "Enter new Shape/Group name: ");
+
+                            if(changeNameDialog.ShowDialog() == true)
+                            {
+                                if(Image.Instance.canvas.find(changeNameDialog.outputBox.Text) != null)
+                                {
+                                    System.Windows.MessageBox.Show("Group with that name already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    return;
+                                }
+
+                                selectedShapeGroup.name = changeNameDialog.outputBox.Text;
+                                _Update(Image.Instance.canvas);
+                            }
+                            
+                        }
+
+                        e.Handled = true;
+                    }
                 }
             }
         }

@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace VecEdit2D
 {   
-    
+    public enum shapeStyle
+    {
+        NORMAL,
+        OUTLINE,
+        EMPTY
+    }
+
     //Composite
     public interface Group
     {
@@ -18,10 +25,9 @@ namespace VecEdit2D
         void rotate(double angleRad, Point rotCenter);
         void scale(double sx, double sy, Point scaleCenter);
         void setColor(Color color);
-        void setBorder(Border border);
-        void setStyle(Style style);
-
-        //void draw();
+        void setBorder(Color border);
+        void setStyle(shapeStyle style);
+        ShapeGroup find(string name);
     }
 
     [Serializable]
@@ -33,11 +39,11 @@ namespace VecEdit2D
         //for scaling and rotating
         //group, has x and y
         public Point center;
-        public Color Color { get; set; }
-        public List<Color> GradientColors { get; set; }
+        public Color color { get; set; }
+        public List<Color> gradientColors { get; set; }
 
-        public Color StrokeColor { get; set; }
-        public int StrokeThickness { get; set; }
+        public Color strokeColor { get; set; }
+        public int strokeThickness { get; set; }
 
 
         [JsonConstructor]
@@ -46,8 +52,8 @@ namespace VecEdit2D
             childGroups = new List<ShapeGroup>();
             center.X = centerx;
             center.Y = centery;
-            Color = primary;
-            StrokeColor = secondary;
+            color = primary;
+            strokeColor = secondary;
             name = "Ksztalt " + ++Globals.ShapeID;
         }
 
@@ -89,19 +95,36 @@ namespace VecEdit2D
                 group.setColor(color);
             }
         }
-        public virtual void setBorder(Border border)
+        public virtual void setBorder(Color border)
         {
             foreach (Group group in childGroups)
             {
                 group.setBorder(border);
             }
         }
-        public virtual void setStyle(Style style)
+        public virtual void setStyle(shapeStyle style)
         {
             foreach (Group group in childGroups)
             {
                 group.setStyle(style);
             }
+        }
+
+        public virtual ShapeGroup find(string name)
+        {
+            if(this.name == name)
+            {
+                return this;
+            }
+            foreach (Group group in childGroups)
+            {
+                ShapeGroup tmp = group.find(name);
+                if (tmp != null)
+                {
+                    return tmp;
+                }
+            }
+            return null;
         }
     }
 }

@@ -13,6 +13,12 @@
                     <TextBlock Text="{Binding name}"/>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeItem_RMBClick"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
         </TreeView>
     </Grid>
 </Window>

@@ -30,8 +30,8 @@ namespace VecEdit2D
             centerX /= points.Count;
             centerY /= points.Count;
             center = new Point(centerX, centerY);
-            Color = primary;
-            StrokeColor = secondary;
+            color = primary;
+            strokeColor = secondary;
 
 
         }
@@ -40,7 +40,7 @@ namespace VecEdit2D
         {
             return new Polyline
             {
-                Stroke = new SolidColorBrush(Color),
+                Stroke = new SolidColorBrush(color),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
                 Points = new PointCollection(contour),
@@ -72,5 +72,14 @@ namespace VecEdit2D
                 contour[i] = PointHelper.Scale(contour[i], scaleCenter, sx, sy);
             }
         }
+        public override ShapeGroup find(string name)
+        {
+            if (this.name == name)
+            {
+                return this;
+            }
+            return null;
+        }
+
     }
 }
