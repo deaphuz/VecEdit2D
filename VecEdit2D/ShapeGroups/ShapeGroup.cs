@@ -110,6 +110,30 @@ namespace VecEdit2D
             }
         }
 
+        public virtual void draw(Canvas canvas)
+        {
+            if (childGroups != null)
+            {
+                foreach (ShapeGroup group in childGroups)
+                {
+                    group.draw(canvas);
+                }
+            }
+
+        }
+
+        public virtual void getWPFFigure()
+        {
+            if(childGroups != null)
+            {
+                foreach (ShapeGroup group in childGroups)
+                {
+                    group.getWPFFigure();
+                }
+            }
+            
+        }
+
         public virtual ShapeGroup find(string name)
         {
             if(this.name == name)

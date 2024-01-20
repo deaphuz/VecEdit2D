@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="950" Width="1200">
     <Window.Resources>
-        <ContextMenu x:Key="CanvasContextMenu">
+        <ContextMenu x:Key="CanvasContextMenu" Name="canvasContextMenu">
             <MenuItem Header="Translate" Click="TranslateItem_Click"/>
             <MenuItem Header="Rotate" Click="RotateItem_Click"/>
             <MenuItem Header="Scale" Click="ScaleItem_Click"/>
@@ -33,7 +33,7 @@
             </MenuItem>
         </Menu>
 
-        <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" Focusable="True" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}"/>
+        <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" ContextMenu="{StaticResource CanvasContextMenu}" Focusable="True" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}"/>
 
 
     </DockPanel>

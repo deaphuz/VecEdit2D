@@ -21,6 +21,7 @@ namespace VecEdit2D
     // Main window
     public partial class MainWindow : Window
     {
+        private static MainWindow _instance;
         private Toolbox toolboxInstance;
         private GroupView groupViewInstance;
         private AppState appStateInstance;
@@ -42,8 +43,18 @@ namespace VecEdit2D
             points = new List<Point>();
 
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
+        }
 
-
+        public static MainWindow Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new MainWindow();
+                }
+                return _instance;
+            }
         }
 
         private void HandleLMBClick(object sender, MouseButtonEventArgs e)
@@ -104,6 +115,9 @@ namespace VecEdit2D
                         break;
                 }
             }
+            refImage.canvas.draw(MainCanvas);
+
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
         }
 
@@ -142,15 +156,16 @@ namespace VecEdit2D
 
                         default:
                             break;
+                        
                     }
-                    //e.Handled = true;
-                    //if its polyline or polygon, draw it
+                    groupViewInstance._Update(refImage.canvas);
+                    e.Handled = true;
                 }
             }
             else //if there are no points, show contextmenu
             {
                 ShowContextMenu();
-               // e.Handled = true;
+                e.Handled = true;
             }
         }
 
@@ -158,57 +173,113 @@ namespace VecEdit2D
         private void ShowContextMenu()
         {
             Point position = Mouse.GetPosition(MainCanvas);
-            ContextMenu.PlacementTarget = MainCanvas;
-            ContextMenu.Placement = PlacementMode.MousePoint;
-            ContextMenu.IsOpen = true;
-            
+            MainCanvas.ContextMenu.PlacementTarget = MainCanvas;
+            MainCanvas.ContextMenu.Placement = PlacementMode.MousePoint;
+            MainCanvas.ContextMenu.IsOpen = true;
         }
 
         //contextmenu item handlers
 
         private void TranslateItem_Click(object sender, EventArgs e)
         {
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
+
+            //make translation
             appStateInstance.refSelectedShapeGroup.translate(10, 10);
+
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
+
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
 
         }
 
         private void RotateItem_Click(object sender, EventArgs e)
         {
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
+
+            //make rotation
             appStateInstance.refSelectedShapeGroup.rotate(100, appStateInstance.refSelectedShapeGroup.center);
+
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
+
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         private void ScaleItem_Click(object sender, EventArgs e)
         {
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
+
+            //scale
             appStateInstance.refSelectedShapeGroup.scale(1.2, 1.2, appStateInstance.refSelectedShapeGroup.center);
+            
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
+
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         private void SetColorItem_Click(object sender, EventArgs e)
         {
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
+
+            //set color
             appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 0, 0, 255));
+            
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
+
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         private void SetOutlineItem_Click(object sender, EventArgs e)
         {
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
+
+            //set outline
             appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 255, 0, 255));
+            
+            //update groupview
             groupViewInstance._Update(refImage.canvas);
+
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         private void RemoveFillingItem_Click(object sender, EventArgs e)
         {
+            //update groupview
+            groupViewInstance._Update(refImage.canvas);
 
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         private void RemoveOutlineItem_Click(object sender, EventArgs e)
         {
+            //update groupview
+            groupViewInstance._Update(refImage.canvas);
 
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
         private void RemoveFigureItem_Click(object sender, EventArgs e)
         {
+            //update groupview
+            groupViewInstance._Update(refImage.canvas);
 
+            //redraw WPF canvas
+            refImage.canvas.draw(MainCanvas);
         }
 
         //file new/read/save

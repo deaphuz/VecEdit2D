@@ -31,6 +31,8 @@ namespace VecEdit2D
         {
             InitializeComponent();
             SetControlsVisibility(false, false, false);
+            primaryColor = Colors.White;
+            secondaryColor = Colors.Black;
         }
         public static Toolbox Instance
         {

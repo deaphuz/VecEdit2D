@@ -28,7 +28,7 @@
 
             <Grid>
             <Button Content="Secondary color" Click="SecondaryColor_Click" Margin="10,2,70,2"/>
-                <Rectangle x:Name="secondaryColorRect" Width="50" Height="15" Fill="White" Stroke="Black" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,10,2"/>
+                <Rectangle x:Name="secondaryColorRect" Width="50" Height="15" Fill="Black" Stroke="Black" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,10,2"/>
             </Grid>
 
         </StackPanel>
@@ -40,6 +40,10 @@
             <TextBlock Text="StrokeThickness:" Margin="5,10,0,0"/>
             <TextBox x:Name="StrokeThicknessTextBox" TextChanged="StrokeThicknessEventHandler" Text="3" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
         </Grid>
+        <DockPanel VerticalAlignment="Bottom" Margin="10">
+            <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+            <Slider Minimum="-100" Maximum="255" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="slValue" />
+        </DockPanel>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>

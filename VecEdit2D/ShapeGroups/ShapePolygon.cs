@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Text.Json.Serialization;
+using System.Windows.Controls;
 
 namespace VecEdit2D
 {
@@ -32,11 +33,14 @@ namespace VecEdit2D
             center = new Point(centerX, centerY);
             color = primary;
             strokeColor = secondary;
+            name = "Ksztalt " + ++Globals.ShapeID;
+
 
         }
 
         public Polygon getWPFFigure()
         {
+          //  MainWindow.Instance.MainCanvas.Children.Add();  
             return new Polygon
             {
                 Stroke = new SolidColorBrush(strokeColor),
@@ -71,6 +75,18 @@ namespace VecEdit2D
             {
                 contour[i] = PointHelper.Scale(contour[i], scaleCenter, sx, sy);
             }
+        }
+
+        public override void draw(Canvas canvas)
+        {
+            canvas.Children.Add(new Polygon
+            {
+                Stroke = new SolidColorBrush(strokeColor),
+                Fill = new SolidColorBrush(color),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
+                Points = new PointCollection(contour),
+            });
         }
 
         public override ShapeGroup find(string name)
