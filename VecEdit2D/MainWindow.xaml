@@ -37,8 +37,6 @@
                 <MenuItem Header="_Translate" Click="TranslateItem_Click" />
                 <MenuItem Header="_Scale"  Click="ScaleItem_Click"/>
                 <MenuItem Header="_Rotate" Click="RotateItem_Click"/>
-                <Separator />
-                <MenuItem Header="_Quit" Click="QuitItem_Click" />
             </MenuItem>
 
         </Menu>
