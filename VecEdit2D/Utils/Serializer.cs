@@ -234,6 +234,3 @@ namespace VecEdit2D
 
     }
 }
-
-    }
-}
