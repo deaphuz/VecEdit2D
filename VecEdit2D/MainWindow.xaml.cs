@@ -29,8 +29,6 @@ namespace VecEdit2D
 
         private List<Point> points;
 
-        public ShapeGroup refSelectedShapeGroup;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -57,8 +55,46 @@ namespace VecEdit2D
             }
         }
 
+        private void RedrawImage()
+        {
+            MainCanvas.Children.Clear();
+            refImage.canvas.draw(MainCanvas);
+        }
+
+        private void showDot()
+        {
+            Ellipse tmp = new Ellipse
+            {
+                Width = 5,
+                Height = 5,
+                Stroke = System.Windows.Media.Brushes.DarkBlue,
+                StrokeThickness = 1,
+                Fill = null,
+            };
+            MainCanvas.Children.Add(tmp);
+            Canvas.SetLeft(tmp, Mouse.GetPosition(MainCanvas).X);
+            Canvas.SetTop(tmp, Mouse.GetPosition(MainCanvas).Y);
+        }
+
+        private void ClearSelection()
+        {
+            points = new List<Point>();
+        }
+
         private void HandleLMBClick(object sender, MouseButtonEventArgs e)
         {
+            //do nothing if context menu is displayed
+            if (MainCanvas.ContextMenu.IsOpen)
+                return;
+
+            //stop user if he not selected group
+            Type type = typeof(ShapeGroup);
+            if (appStateInstance.refSelectedShapeGroup.GetType() != type )
+            {
+                System.Windows.MessageBox.Show("Select group instead of shape", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             if (e.OriginalSource is Shape)
             {
                 Shape activeRectangle = (Shape)e.OriginalSource;
@@ -67,57 +103,66 @@ namespace VecEdit2D
             else
             {
                 points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
+
+                //show dot  : )
+                showDot();
+
                 switch (toolboxInstance.currentShape)
                 {
+                    case "group":
+                        if (points.Count == 1)
+                        {
+                            //add shape
+                            ShapeGroup newShape = new ShapeGroup(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                            ClearSelection();
+                        }
+                        else if (points.Count > 1)
+                            ClearSelection();
+                        break;
                     case "circle":
                         if (points.Count == 1)
                         {
+                            //add shape
                             ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            Ellipse figure = newShape.getWPFFigure();
-                            MainCanvas.Children.Add(figure);
-                            Canvas.SetLeft(figure, newShape.center.X - newShape.getWPFRadius());
-                            Canvas.SetTop(figure, newShape.center.Y - newShape.getWPFRadius());
-                            points = new List<Point>();
+                            ClearSelection();
                         }
                         else if (points.Count > 1)
-                            points = new List<Point>();
+                            ClearSelection();
                         break;
 
 
                     case "rectangle":
                         if (points.Count == 2)
                         {
+                            //add shape
                             ShapeRectangle newShape = new ShapeRectangle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            Polygon figure = newShape.getWPFFigure();
-                            MainCanvas.Children.Add(figure);
-                            //Canvas.SetLeft(figure, newShape.center.X);
-                           // Canvas.SetTop(figure, newShape.center.Y);
-                            points = new List<Point>();
+                            ClearSelection();
                         }
                         else if (points.Count > 2)
-                            points = new List<Point>();
+                            ClearSelection();
                         break;
                     case "straightLine":
                         if (points.Count == 2)
                         {
+                            //add shape
                             ShapeLine newShape = new ShapeLine(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            Line figure = newShape.getWPFFigure();
-                            MainCanvas.Children.Add(figure);
-                            //Canvas.SetLeft(figure, newShape.center.X);
-                            // Canvas.SetTop(figure, newShape.center.Y);
-                            points = new List<Point>();
+
+                            ClearSelection();
                         }
                         else if (points.Count > 2)
-                            points = new List<Point>();
+                            ClearSelection();
                         break;
                 }
             }
-            refImage.canvas.draw(MainCanvas);
+            if (points.Count == 0)
+                RedrawImage();
 
-            //update groupview
+
+            //update GroupView bar
             groupViewInstance._Update(refImage.canvas);
         }
 
@@ -125,39 +170,40 @@ namespace VecEdit2D
         {
             if (points.Count > 0)
             {
+
                 if (points.Count > 2) //minimum 3
                 {
                     switch (toolboxInstance.currentShape)
                     {
                         case "polygon":
                         {
+                                //add shape
                             ShapePolygon newShape = new ShapePolygon(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            Polygon figure = newShape.getWPFFigure();
-                            MainCanvas.Children.Add(figure);
-                                //Canvas.SetLeft(figure, newShape.center.X);
-                                // Canvas.SetTop(figure, newShape.center.Y);
-                            points = new List<Point>();
-                            break;
+
+                                ClearSelection();
+                                break;
                         }
 
 
                         case "polyline":
                         {
-                            ShapePolyline newShape = new ShapePolyline(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                                //add shape
+                                ShapePolyline newShape = new ShapePolyline(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            Polyline figure = newShape.getWPFFigure();
-                            MainCanvas.Children.Add(figure);
-                                //Canvas.SetLeft(figure, newShape.center.X);
-                                // Canvas.SetTop(figure, newShape.center.Y);
-                            points = new List<Point>();
-                            break;
+
+                                ClearSelection();
+                                break;
                         }
 
                         default:
                             break;
                         
                     }
+                    //redraw image
+                    if (points.Count == 0)
+                        RedrawImage();
+
                     groupViewInstance._Update(refImage.canvas);
                     e.Handled = true;
                 }
@@ -186,13 +232,10 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //make translation
-            appStateInstance.refSelectedShapeGroup.translate(10, 10);
+            appStateInstance.refSelectedShapeGroup.translate(toolboxInstance.trX, toolboxInstance.trY);
 
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
-
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //redraw image
+            RedrawImage();
 
         }
 
@@ -202,13 +245,10 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //make rotation
-            appStateInstance.refSelectedShapeGroup.rotate(100, appStateInstance.refSelectedShapeGroup.center);
+            appStateInstance.refSelectedShapeGroup.rotate(toolboxInstance.rotAngle * (Math.PI / 180.0), appStateInstance.refSelectedShapeGroup.center);
 
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
-
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //redraw image
+            RedrawImage();
         }
 
         private void ScaleItem_Click(object sender, EventArgs e)
@@ -217,13 +257,10 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //scale
-            appStateInstance.refSelectedShapeGroup.scale(1.2, 1.2, appStateInstance.refSelectedShapeGroup.center);
-            
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            appStateInstance.refSelectedShapeGroup.scale(toolboxInstance.scaleFactor, toolboxInstance.scaleFactor, appStateInstance.refSelectedShapeGroup.center);
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //redraw image
+            RedrawImage();
         }
 
         private void SetColorItem_Click(object sender, EventArgs e)
@@ -232,13 +269,10 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //set color
-            appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 0, 0, 255));
-            
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            appStateInstance.refSelectedShapeGroup.setColor(toolboxInstance.primaryColor);
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //redraw image
+            RedrawImage();
         }
 
         private void SetOutlineItem_Click(object sender, EventArgs e)
@@ -247,39 +281,46 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //set outline
-            appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 255, 0, 255));
-            
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            appStateInstance.refSelectedShapeGroup.setBorder(toolboxInstance.secondaryColor);
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //redraw image
+            RedrawImage();
         }
 
         private void RemoveFillingItem_Click(object sender, EventArgs e)
         {
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //set outline
+            appStateInstance.refSelectedShapeGroup.setColor(Color.FromArgb(0, 255, 255, 255));
+
+            //redraw image
+            RedrawImage();
+
         }
 
         private void RemoveOutlineItem_Click(object sender, EventArgs e)
         {
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //set outline
+            appStateInstance.refSelectedShapeGroup.setBorder(Color.FromArgb(0, 255, 255, 255));
+
+            //redraw image
+            RedrawImage();
         }
         private void RemoveFigureItem_Click(object sender, EventArgs e)
         {
-            //update groupview
-            groupViewInstance._Update(refImage.canvas);
+            //clear WPF canvas
+            MainCanvas.Children.Clear();
 
-            //redraw WPF canvas
-            refImage.canvas.draw(MainCanvas);
+            //TODO remove figure
+            appStateInstance.refSelectedShapeGroup.setBorder(Color.FromArgb(0, 255, 255, 255));
+
+            //redraw image
+            RedrawImage();
         }
 
         //file new/read/save

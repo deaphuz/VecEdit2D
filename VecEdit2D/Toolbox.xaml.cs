@@ -27,10 +27,17 @@ namespace VecEdit2D
         public double Width { get; set; }
         public double Height { get; set; }
         public double Radius { get; set; }
+
+        //others
+        public double scaleFactor { get; set; }
+        public double rotAngle { get; set; }
+        public double trX { get; set; }
+        public double trY { get; set; }
+
+
         private Toolbox()
         {
             InitializeComponent();
-            SetControlsVisibility(false, false, false);
             primaryColor = Colors.White;
             secondaryColor = Colors.Black;
         }
@@ -67,13 +74,11 @@ namespace VecEdit2D
         private void Circle_Click(object sender, RoutedEventArgs e)
         {
             currentShape = "circle";
-            SetControlsVisibility(false, false, true);
         }
 
         private void Rectangle_Click(object sender, RoutedEventArgs e)
         {
             currentShape = "rectangle";
-            SetControlsVisibility(true, true, false);
         }
 
         private void TextArea_Click(object sender, RoutedEventArgs e)
@@ -85,19 +90,12 @@ namespace VecEdit2D
         {
             StrokeThickness = double.Parse(StrokeThicknessTextBox.Text);
         }
-        private void WidthEventHandler(object sender, TextChangedEventArgs args)
-        {
-            Width = double.Parse(WidthTextBox.Text);
-        }
-        private void HeightEventHandler(object sender, TextChangedEventArgs args)
-        {
-            Height = double.Parse(HeightTextBox.Text);
-        }
+/*
         private void RadiusEventHandler(object sender, TextChangedEventArgs args)
         {
             Radius = double.Parse(RadiusTextBox.Text);
         }
-
+      */
         private void PrimaryColor_Click(object sender, RoutedEventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
@@ -121,15 +119,59 @@ namespace VecEdit2D
             }
         }
 
-        private void SetControlsVisibility(bool widthVisible, bool heightVisible, bool radiusVisible)
+        private void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
-            WidthTextBlock.Visibility = widthVisible ? Visibility.Visible : Visibility.Collapsed;
-            HeightTextBlock.Visibility = heightVisible ? Visibility.Visible : Visibility.Collapsed;
-            RadiusTextBlock.Visibility = radiusVisible ? Visibility.Visible : Visibility.Collapsed;
+            System.Windows.Controls.TextBox textBox = (System.Windows.Controls.TextBox)sender;
+            double value = 0.0;
+            if (double.TryParse(textBox.Text, out value))
+            {
+                switch(textBox.Name)
+                {
+                    case "ScaleBox":
+                        scaleFactor = value;
+                        break;
+                    case "RotationBox":
+                        rotAngle = value;
+                        break;
+                    case "TranslationXBox":
+                        trX = value;
+                        break;
+                    case "TranslationYBox":
+                        trY = value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
-            WidthTextBox.Visibility = widthVisible ? Visibility.Visible : Visibility.Collapsed;
-            HeightTextBox.Visibility = heightVisible ? Visibility.Visible : Visibility.Collapsed;
-            RadiusTextBox.Visibility = radiusVisible ? Visibility.Visible : Visibility.Collapsed;
+        private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            System.Windows.Controls.Slider slider = (System.Windows.Controls.Slider)sender;
+
+            double newValue = e.NewValue;
+
+            switch(slider.Name)
+            {
+                case "scaleSlider":
+                    ScaleBox.Text = newValue.ToString();
+                    scaleFactor = newValue;
+                    break;
+                case "rotationSlider":
+                    RotationBox.Text = newValue.ToString();
+                    rotAngle = newValue;
+                    break;
+                case "trSliderX":
+                    TranslationXBox.Text = newValue.ToString();
+                    trX = newValue;
+                    break;
+                case "trSliderY":
+                    TranslationYBox.Text = newValue.ToString();
+                    trY = newValue;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

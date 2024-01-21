@@ -32,29 +32,40 @@
             </Grid>
 
         </StackPanel>
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="StrokeThickness:" Margin="5,10,0,0"/>
+            <TextBlock Text="Stroke thickness:" Margin="5,10,0,0"/>
             <TextBox x:Name="StrokeThicknessTextBox" TextChanged="StrokeThicknessEventHandler" Text="3" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
         </Grid>
-        <DockPanel VerticalAlignment="Bottom" Margin="10">
-            <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
-            <Slider Minimum="-100" Maximum="255" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="slValue" />
-        </DockPanel>
+
         <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="100"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="WidthTextBlock" Text="Width:" Margin="5,10,0,0"/>
-            <TextBox x:Name="WidthTextBox" TextChanged="WidthEventHandler" Text="50" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
-            <TextBlock x:Name="RadiusTextBlock" Text="Radius:" Margin="5,10,0,0"/>
-            <TextBox x:Name="RadiusTextBox" TextChanged="RadiusEventHandler" Text="50" Width="50" Margin="0,10,0,0" Grid.Column="1" VerticalAlignment="Top"/>
-            <TextBlock x:Name="HeightTextBlock" Text="Height:" Margin="5,40,0,0"/>
-            <TextBox x:Name="HeightTextBox" TextChanged="HeightEventHandler" Text="50" Width="50" Margin="0,40,0,0" Grid.Column="1" VerticalAlignment="Top"/>
+            <Label x:Name="ScaleLabel" Content="Scale factor" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <DockPanel VerticalAlignment="Top" Margin="10,25,10,10">
+                <TextBox Name="ScaleBox" Text="{Binding ElementName=scaleSliderValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Minimum="0.1" Maximum="5" TickPlacement="BottomRight" TickFrequency="0.1" IsSnapToTickEnabled="True" Name="scaleSlider" ValueChanged="OnSliderValueChanged"/>
+            </DockPanel>
+
+            <Label x:Name="RotationLabel" Content="Rotation angle (in °) (+ clockwise)" Margin="0,50,10,10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <DockPanel VerticalAlignment="Top" Margin="10,80,10,10">
+                <TextBox Name="RotationBox"  Text="{Binding ElementName=rotationSliderValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Minimum="-180" Maximum="180" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="rotationSlider" ValueChanged="OnSliderValueChanged"/>
+            </DockPanel>
+
+            <Label x:Name="TranslationXLabel" Content="Translation X" Margin="0,110,10,10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <DockPanel VerticalAlignment="Top" Margin="10,140,10,10">
+                <TextBox Name="TranslationXBox" Text="{Binding ElementName=trSliderXValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Minimum="-200" Maximum="200" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="trSliderX" ValueChanged="OnSliderValueChanged"/>
+            </DockPanel>
+
+            <Label x:Name="TranslationYLabel" Content="Translation Y" Margin="0,170,10,10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <DockPanel VerticalAlignment="Top" Margin="10,200,10,10">
+                <TextBox Name="TranslationYBox" Text="{Binding ElementName=trSliderYValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Minimum="-200" Maximum="200" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="trSliderY" ValueChanged="OnSliderValueChanged"/>
+            </DockPanel>
         </Grid>
     </Grid>
 </Window>

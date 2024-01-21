@@ -32,7 +32,7 @@ namespace VecEdit2D
             name = "Ksztalt " + ++Globals.ShapeID;
 
         }
-
+        /*
         public Line getWPFFigure()
         {
             return new Line
@@ -46,6 +46,7 @@ namespace VecEdit2D
                 Y2 = endPoint.Y,
             };
         }
+        */
 
         public override void translate(double dx, double dy)
         {

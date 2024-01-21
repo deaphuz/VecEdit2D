@@ -18,11 +18,19 @@ namespace VecEdit2D
         public double r { get; set; }
 
         [JsonConstructor]
-        public ShapeCircle(double mousex, double mousey, double r, Color primary, Color secondary) : base(mousex, mousey, primary, secondary)
+
+        public ShapeCircle(double centerx, double centery, double r, Color primary, Color secondary)
         {
+            childGroups = new List<ShapeGroup>();
+            center.X = centerx;
+            center.Y = centery;
+            color = primary;
+            strokeColor = secondary;
             this.r = r;
+            name = "Shape " + ++Globals.ShapeID;
         }
 
+        /*
         public Ellipse getWPFFigure()
         {
             return new Ellipse
@@ -35,6 +43,7 @@ namespace VecEdit2D
                 Height = 2 * r,
             };
         }
+        */
 
         public double getWPFRadius()
         {

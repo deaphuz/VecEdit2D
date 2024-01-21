@@ -38,6 +38,7 @@ namespace VecEdit2D
 
         }
 
+        /*
         public Polygon getWPFFigure()
         {
           //  MainWindow.Instance.MainCanvas.Children.Add();  
@@ -50,6 +51,7 @@ namespace VecEdit2D
                 Points = new PointCollection(contour),
             };
         }
+        */
 
 
         public override void translate(double dx, double dy)

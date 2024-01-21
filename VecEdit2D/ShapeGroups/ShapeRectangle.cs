@@ -38,6 +38,7 @@ namespace VecEdit2D
 
         }
 
+        /*
         public Polygon getWPFFigure()
         {
             return new Polygon
@@ -49,6 +50,7 @@ namespace VecEdit2D
                 Points = new PointCollection { p1, p2, p3, p4 },
             };
         }
+        */
 
         public override void translate(double dx, double dy)
         {

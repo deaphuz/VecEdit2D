@@ -37,6 +37,7 @@ namespace VecEdit2D
 
         }
 
+        /*
         public Polyline getWPFFigure()
         {
             return new Polyline
@@ -47,7 +48,7 @@ namespace VecEdit2D
                 Points = new PointCollection(contour),
             };
         }
-
+        */
 
         public override void translate(double dx, double dy)
         {

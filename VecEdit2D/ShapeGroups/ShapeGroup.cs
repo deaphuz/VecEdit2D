@@ -54,7 +54,7 @@ namespace VecEdit2D
             center.Y = centery;
             color = primary;
             strokeColor = secondary;
-            name = "Ksztalt " + ++Globals.ShapeID;
+            name = "Group " + ++Globals.ShapeID;
         }
 
         //TODO NEW CONSTRUCTORS
@@ -69,59 +69,48 @@ namespace VecEdit2D
         public ShapeGroup() { }
         public virtual void translate(double dx, double dy)
         {
-            foreach (Group group in childGroups)
-            {
+            if (childGroups != null)
+                foreach (Group group in childGroups)
                 group.translate(dx, dy);
-            }
         }
         public virtual void rotate(double angleRad, Point rotCenter)
         {
-            foreach (Group group in childGroups)
-            {
+            if (childGroups != null)
+                foreach (Group group in childGroups)
                 group.rotate(angleRad, rotCenter);
-            }
         }
         public virtual void scale(double sx, double sy, Point scaleCenter)
         {
-            foreach (Group group in childGroups)
-            {
+            if (childGroups != null)
+                foreach (Group group in childGroups)
                 group.scale(sx, sy, scaleCenter);
-            }
         }
         public virtual void setColor(Color color)
         {
-            foreach (Group group in childGroups)
-            {
-                group.setColor(color);
-            }
+            if (childGroups != null)
+                foreach (Group group in childGroups)
+                     group.setColor(color);
         }
         public virtual void setBorder(Color border)
         {
-            foreach (Group group in childGroups)
-            {
-                group.setBorder(border);
-            }
+            if (childGroups != null)
+                foreach (Group group in childGroups)
+                     group.setBorder(border);
         }
         public virtual void setStyle(shapeStyle style)
         {
-            foreach (Group group in childGroups)
-            {
-                group.setStyle(style);
-            }
+            if (childGroups != null)
+                foreach (Group group in childGroups)
+                    group.setStyle(style);
         }
 
         public virtual void draw(Canvas canvas)
         {
             if (childGroups != null)
-            {
                 foreach (ShapeGroup group in childGroups)
-                {
                     group.draw(canvas);
-                }
-            }
-
         }
-
+        /*
         public virtual void getWPFFigure()
         {
             if(childGroups != null)
@@ -133,6 +122,7 @@ namespace VecEdit2D
             }
             
         }
+        */
 
         public virtual ShapeGroup find(string name)
         {
@@ -141,6 +131,23 @@ namespace VecEdit2D
                 return this;
             }
             foreach (Group group in childGroups)
+            {
+                ShapeGroup tmp = group.find(name);
+                if (tmp != null)
+                {
+                    return tmp;
+                }
+            }
+            return null;
+        }
+
+        public virtual ShapeGroup remove(string name)
+        {
+            if (this.name == name)
+            {
+                return this;
+            }
+            foreach (ShapeGroup group in childGroups)
             {
                 ShapeGroup tmp = group.find(name);
                 if (tmp != null)
