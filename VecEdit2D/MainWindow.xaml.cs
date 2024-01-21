@@ -386,5 +386,8 @@ namespace VecEdit2D
         {
             System.Windows.Application.Current.Shutdown();
         }
+
+
+
     }
 }
