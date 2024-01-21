@@ -18,7 +18,7 @@ namespace VecEdit2D
         EMPTY
     }
 
-    //Composite
+    //Composite, Prototype
     public interface Group
     {
         void translate(double dx, double dy);

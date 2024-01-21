@@ -82,6 +82,7 @@ namespace VecEdit2D
 
                     //show selection
                     AppState.Instance.refSelectedShapeGroup.showSelection();
+                    MainWindow.Instance.RedrawImage();
 
 
                     /*

@@ -30,7 +30,6 @@ namespace VecEdit2D
             double r
         ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
         {
-            childGroups = new List<ShapeGroup>();
             this.r = r;
         }
 

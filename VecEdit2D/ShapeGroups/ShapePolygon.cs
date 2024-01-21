@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 namespace VecEdit2D
 {
     [Serializable]
-  //[JsonObject(MemberSerialization.OptIn)]
     public class ShapePolygon : ShapeGroup
     {
         public List<Point> contour;
