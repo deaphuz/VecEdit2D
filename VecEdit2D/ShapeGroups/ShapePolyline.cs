@@ -77,7 +77,7 @@ namespace VecEdit2D
         }
         public override void setStyle(shapeStyle style)
         {
-
+            this.style = style;
         }
 
         public override void draw(Canvas canvas)
@@ -91,9 +91,13 @@ namespace VecEdit2D
             });
         }
 
-        public void showSelection()
+        public override void showSelection()
         {
-
+            foreach(Point p in contour)
+            {
+                MainWindow.Instance.showDot(p.X, p.Y);
+            }
+            MainWindow.Instance.showDot(center.X, center.Y);
         }
 
         public override ShapeGroup find(string name)
@@ -104,8 +108,13 @@ namespace VecEdit2D
             }
             return null;
         }
+        public override bool remove(string name)
+        {
+            return false;
+        }
 
-        public ShapePolyline clone()
+
+        public override ShapeGroup clone()
         { return new ShapePolyline(this); }
     }
 }

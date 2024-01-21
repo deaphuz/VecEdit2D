@@ -13,42 +13,33 @@ using System.Windows.Documents;
 namespace VecEdit2D
 {
     [Serializable]
-    public class ShapeCircle : ShapeGroup
+    public class ShapeText : ShapeGroup
     {
-        public double r { get; set; }
+        public string text;
+        public double fontSize;
 
         [JsonConstructor]
 
-        public ShapeCircle(Point p1, Point p2, Color primary, Color secondary)
+        public ShapeText(Point p1, Color primary, Color secondary, string text, double fontSize)
         {
             childGroups = new List<ShapeGroup>();
-            center.X = p1.X;
-            center.Y = p1.Y;
+            center = new Point(p1.X, p1.Y);
             color = primary;
             strokeColor = secondary;
-
-            double dx = p2.X - p1.X;
-            double dy = p2.Y - p1.Y;
-
-            r = Math.Sqrt(dx*dx + dy * dy);
+            this.text = text;
+            this.fontSize = fontSize;
             name = "Shape " + ++Globals.ShapeID;
         }
 
-        public ShapeCircle(double centerx, double centery, double r, Color primary, Color secondary)
+        public ShapeText(ShapeText shapeText)
         {
             childGroups = new List<ShapeGroup>();
-            center.X = centerx;
-            center.Y = centery;
-            color = primary;
-            strokeColor = secondary;
-            this.r = r;
+            center = new Point(shapeText.center.X, shapeText.center.Y);
+            color = shapeText.color;
+            strokeColor = shapeText.strokeColor;
+            this.text = shapeText.text;
+            this.fontSize = shapeText.fontSize;
             name = "Shape " + ++Globals.ShapeID;
-        }
-
-
-        public ShapeCircle(ShapeCircle shapeCircle)
-        {
-            //TODO
         }
 
         public override void translate(double dx, double dy)
@@ -62,7 +53,7 @@ namespace VecEdit2D
         public override void scale(double sx, double sy, Point scaleCenter)
         {
             center = PointHelper.Scale(center, scaleCenter, sx, sy);
-            r *= (sx + sy) / 2;
+            fontSize*= (sx + sy) / 2;
         }
 
         public override void setColor(Color color)
@@ -83,20 +74,24 @@ namespace VecEdit2D
             MainWindow.Instance.showDot(center.X, center.Y);
         }
 
+
+        public override bool remove(string name)
+        {
+            return false;
+        }
         public override void draw(Canvas canvas)
         {
-            Ellipse el = new Ellipse
+            TextBlock element = new TextBlock
             {
-                Stroke = new SolidColorBrush(strokeColor),
-                Fill = new SolidColorBrush(color),
+                FontSize = fontSize,
+                Text = text,
+                Foreground = new SolidColorBrush(color),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Center,
-                Width = 2 * r,
-                Height = 2 * r,
             };
-            canvas.Children.Add(el);
-            Canvas.SetLeft(el, center.X - r);
-            Canvas.SetTop(el, center.Y - r);
+            canvas.Children.Add(element);
+          //  Canvas.SetLeft(element, center.X - r);
+           // Canvas.SetTop(element, center.Y - r);
         }
 
         public override ShapeGroup find(string name)
@@ -108,12 +103,7 @@ namespace VecEdit2D
             return null;
         }
 
-        public override bool remove(string name)
-        {
-            return false;
-        }
-
         public override ShapeGroup clone()
-        { return new ShapeCircle(this); }
+        { return new ShapeText(this); }
     }
 }

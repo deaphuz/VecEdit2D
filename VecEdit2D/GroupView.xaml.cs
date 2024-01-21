@@ -80,6 +80,9 @@ namespace VecEdit2D
                     ShapeGroup foundedShapeGroup = selectedItem.Tag as ShapeGroup;
                     AppState.Instance.refSelectedShapeGroup = foundedShapeGroup;
 
+                    //show selection
+                    AppState.Instance.refSelectedShapeGroup.showSelection();
+
 
                     /*
                     if (selectedItem.Tag is ShapeGroup selectedShapeGroup)

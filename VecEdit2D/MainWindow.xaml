@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VecEdit2D"
         mc:Ignorable="d"
-        Title="Canvas" Height="950" Width="1200">
+        Title="Canvas" Height="950" Width="1200"
+        PreviewKeyDown="OnKeyDownHandler">
     <Window.Resources>
         <ContextMenu x:Key="CanvasContextMenu" Name="canvasContextMenu">
             <MenuItem Header="Translate" Click="TranslateItem_Click"/>
@@ -31,6 +32,8 @@
                 <Separator />
                 <MenuItem Header="_Quit" Click="QuitItem_Click" />
             </MenuItem>
+            <MenuItem Header="_Clear selection" Click="ClearSelectionHandler" />
+
         </Menu>
 
         <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" ContextMenu="{StaticResource CanvasContextMenu}" Focusable="True" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}"/>

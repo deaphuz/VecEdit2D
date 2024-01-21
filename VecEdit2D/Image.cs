@@ -58,19 +58,32 @@ namespace VecEdit2D
             }*/
         }
 
-        public ShapeGroup Read()
+        public void New()
+        {
+            canvas = new ShapeGroup()
+            {
+                childGroups = new List<ShapeGroup>(),
+                name = "canvas",
+                center = new System.Windows.Point(0, 0),
+                color = System.Windows.Media.Colors.White,
+                strokeColor = System.Windows.Media.Colors.Black,
+                strokeThickness = 2,
+            };
+        }
+
+        public void Read()
         {
             string filename = "";
             try { filename = OpenReadDialog(); }
-            catch (Exception) { System.Windows.MessageBox.Show("Invalid file path", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
+            catch (Exception) { System.Windows.MessageBox.Show("Invalid file path", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
 
             Serializer serializer = new Serializer();
 
             ShapeGroup output = new ShapeGroup();
             try { output = serializer.ReadFromJson(filename); }
-            catch (Exception) { System.Windows.MessageBox.Show("Failed to read the image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return null; }
+            catch (Exception) { System.Windows.MessageBox.Show("Failed to read the image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
             System.Windows.MessageBox.Show("Image read", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            return output;
+            canvas = output;
         }
 
         public void Save()

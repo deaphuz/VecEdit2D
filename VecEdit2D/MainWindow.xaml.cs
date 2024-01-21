@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,6 +28,7 @@ namespace VecEdit2D
         private GroupView groupViewInstance;
         private AppState appStateInstance;
         private Image refImage;
+        private bool isContextMenuOpened;
 
         private List<Point> points;
 
@@ -40,6 +42,7 @@ namespace VecEdit2D
             appStateInstance = AppState.Instance;
             refImage = Image.Instance;
             points = new List<Point>();
+            isContextMenuOpened = false;
 
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
         }
@@ -62,7 +65,7 @@ namespace VecEdit2D
             refImage.canvas.draw(MainCanvas);
         }
 
-        private void showDot(double x, double y)
+        public void showDot(double x, double y)
         {
             Ellipse tmp = new Ellipse
             {
@@ -77,21 +80,20 @@ namespace VecEdit2D
             Canvas.SetTop(tmp, y);
         }
 
-        private void showSelection()
+        private void ClearSelectionHandler(object sender, RoutedEventArgs e)
         {
             points = new List<Point>();
+            RedrawImage();
         }
 
         private void ClearSelection()
         {
             points = new List<Point>();
+            RedrawImage();
         }
 
         private void HandleLMBClick(object sender, MouseButtonEventArgs e)
         {
-            //do nothing if context menu is displayed
-            if (MainCanvas.ContextMenu.IsOpen)
-                return;
 
             //stop user if he not selected group
             Type type = typeof(ShapeGroup);
@@ -165,7 +167,25 @@ namespace VecEdit2D
             groupViewInstance._Update(refImage.canvas);
         }
 
+
+        private void OnKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                HandlePolygonDrawing();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                ClearSelection();
+            }
+        }
+
         private void HandleRMBClick(object sender, MouseButtonEventArgs e)
+        {
+            ShowContextMenu();
+        }
+
+        void HandlePolygonDrawing()
         {
             if (points.Count > 0)
             {
@@ -174,42 +194,34 @@ namespace VecEdit2D
                     switch (toolboxInstance.currentShape)
                     {
                         case "polygon":
-                        {
+                            {
                                 //add shape
-                            ShapePolygon newShape = new ShapePolygon(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                                ShapePolygon newShape = new ShapePolygon(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                                appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
 
                                 ClearSelection();
                                 break;
-                        }
-
-
+                            }
                         case "polyline":
-                        {
+                            {
                                 //add shape
                                 ShapePolyline newShape = new ShapePolyline(points, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                                appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
 
                                 ClearSelection();
                                 break;
-                        }
+                            }
 
                         default:
                             break;
-                        
+
                     }
                     //redraw image
                     if (points.Count == 0)
                         RedrawImage();
 
                     groupViewInstance._Update(refImage.canvas);
-                    e.Handled = true;
                 }
-            }
-            else //if there are no points, show contextmenu
-            {
-                ShowContextMenu();
-                e.Handled = true;
             }
         }
 
@@ -219,7 +231,7 @@ namespace VecEdit2D
             Point position = Mouse.GetPosition(MainCanvas);
             MainCanvas.ContextMenu.PlacementTarget = MainCanvas;
             MainCanvas.ContextMenu.Placement = PlacementMode.MousePoint;
-            MainCanvas.ContextMenu.IsOpen = true;
+            isContextMenuOpened = true;
         }
 
         //contextmenu item handlers
@@ -325,17 +337,28 @@ namespace VecEdit2D
 
         private void NewFileItem_Click(object sender, RoutedEventArgs e)
         {
+            points = new List<Point>();
+            Image.Instance.New();
 
+            RedrawImage();
+
+            //update GroupView bar
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void ReadFileItem_Click(object sender, RoutedEventArgs e)
         {
+            Image.Instance.Read();
 
+            RedrawImage();
+
+            //update GroupView bar
+            groupViewInstance._Update(refImage.canvas);
         }
 
         private void SaveFileItem_Click(object sender, RoutedEventArgs e)
         {
-
+            Image.Instance.Save();
         }
 
         private void QuitItem_Click(object sender, RoutedEventArgs e)
@@ -349,9 +372,9 @@ namespace VecEdit2D
 
             if (inputDialog.ShowDialog() == true)
             {
-                if(appStateInstance.refSelectedShapeGroup.remove(inputDialog.outputBox.Text) == null)
+                if(appStateInstance.refSelectedShapeGroup.remove(inputDialog.outputBox.Text) == false)
                 {
-                    System.Windows.MessageBox.Show("Item not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Item not found \n(notice that to remove an item, you must activate\ndelete option in the group in which it is located)", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 

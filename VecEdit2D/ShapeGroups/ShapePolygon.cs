@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Text.Json.Serialization;
 using System.Windows.Controls;
+using System.Net;
 
 namespace VecEdit2D
 {
@@ -17,6 +18,21 @@ namespace VecEdit2D
         public List<Point> contour;
 
         [JsonConstructor]
+        public ShapePolygon(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            List<Point> contour,
+            shapeStyle style
+        ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            this.contour = contour;
+        }
+
         public ShapePolygon(List<Point> points, Color primary, Color secondary)
         {
             contour = new List<Point>();
@@ -35,15 +51,23 @@ namespace VecEdit2D
             strokeColor = secondary;
             name = "Shape " + ++Globals.ShapeID;
 
-
         }
+
 
         public ShapePolygon(ShapePolygon shapePolygon)
         {
-            //TODO
+            childGroups = new List<ShapeGroup>();
+
+            foreach(Point p in shapePolygon.contour)
+            {
+                contour.Add(new Point(p.X, p.Y));
+            }
+            center = new Point(shapePolygon.center.X, shapePolygon.center.Y);
+            color = shapePolygon.color;
+            strokeColor = shapePolygon.strokeColor;
+
+            name = "Shape " + ++Globals.ShapeID;
         }
-
-
 
         public override void translate(double dx, double dy)
         {
@@ -80,9 +104,13 @@ namespace VecEdit2D
         }
         public override void setStyle(shapeStyle style)
         {
-
+            this.style = style;
         }
 
+        public override bool remove(string name)
+        {
+            return false;
+        }
         public override void draw(Canvas canvas)
         {
             canvas.Children.Add(new Polygon
@@ -95,10 +123,15 @@ namespace VecEdit2D
             });
         }
 
-        public void showSelection()
+        public override void showSelection()
         {
-
+            foreach (Point p in contour)
+            {
+                MainWindow.Instance.showDot(p.X, p.Y);
+            }
+            MainWindow.Instance.showDot(center.X, center.Y);
         }
+
 
         public override ShapeGroup find(string name)
         {
@@ -109,7 +142,7 @@ namespace VecEdit2D
             return null;
         }
 
-        public ShapePolygon clone()
+        public override ShapeGroup clone()
         { return new ShapePolygon(this); }
     }
 }

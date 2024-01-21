@@ -36,6 +36,7 @@ namespace VecEdit2D
     [Serializable]
     public class ShapeGroup : Group
     {
+       // [JsonProperty]
         public List<ShapeGroup> childGroups;
         public string name;
 
@@ -48,8 +49,30 @@ namespace VecEdit2D
         public Color strokeColor { get; set; }
         public int strokeThickness { get; set; }
 
+        public shapeStyle style;
 
         [JsonConstructor]
+        public ShapeGroup(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            shapeStyle style
+        )
+        {
+            this.childGroups = childGroups;
+            this.name = name;
+            this.center = center;
+            this.color = color;
+            this.gradientColors = gradientColors;
+            this.strokeColor = strokeColor;
+            this.strokeThickness = strokeThickness;
+            this.style = style;
+        }
+
         public ShapeGroup(double centerx, double centery, Color primary, Color secondary)
         {
             childGroups = new List<ShapeGroup>();
@@ -120,8 +143,42 @@ namespace VecEdit2D
         public virtual void draw(Canvas canvas)
         {
             if (childGroups != null)
+            {
                 foreach (ShapeGroup group in childGroups)
-                    group.draw(canvas);
+                {
+                    ShapePolygon test = group as ShapePolygon;
+                    if(test != null)
+                    {
+                        test.draw(canvas);
+                    }
+/*
+                    if (group is ShapeCircle)
+                    {
+                        ((ShapeCircle)group).draw(canvas);
+                    }
+                    else if (group is ShapePolygon)
+                    {
+                        ((ShapePolygon)group).draw(canvas);
+                    }
+                    else if (group is ShapeLine)
+                    {
+                        ((ShapeLine)group).draw(canvas);
+                    }
+                    else if (group is ShapePolyline)
+                    {
+                        ((ShapePolyline)group).draw(canvas);
+                    }
+                    else if (group is ShapeRectangle)
+                    {
+                        ((ShapeRectangle)group).draw(canvas);
+                    }
+                    else if (group is ShapeText)
+                    {
+                        ((ShapeText)group).draw(canvas);
+                    }*/
+                }
+            }
+
         }
 
         public virtual ShapeGroup find(string name)
@@ -141,27 +198,27 @@ namespace VecEdit2D
             return null;
         }
 
-        public virtual ShapeGroup remove(string name)
+        public virtual bool remove(string name)
         {
-            if (this.name == name)
-            {
-                return this;
-            }
             foreach (ShapeGroup group in childGroups)
             {
-                ShapeGroup tmp = group.find(name);
-                if (tmp != null)
+                if(group.name == name)
                 {
-                    return tmp;
+                    childGroups.Remove(group);
+                    return true;
                 }
+                group.remove(name);
             }
-            return null;
+            return false;
         }
 
-        public void showSelection()
+        public virtual void showSelection()
         {
-
+            if (childGroups != null)
+                foreach (ShapeGroup group in childGroups)
+                    group.showSelection();
         }
+
         public virtual ShapeGroup clone()
         { return new ShapeGroup(this); }
     }

@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Text.Json.Serialization;
 using System.Windows.Controls;
+using System.Net;
 
 namespace VecEdit2D
 {
@@ -78,7 +79,12 @@ namespace VecEdit2D
         }
         public override void setStyle(shapeStyle style)
         {
+            this.style = style;
+        }
 
+        public override bool remove(string name)
+        {
+            return false;
         }
 
         public override void draw(Canvas canvas)
@@ -93,9 +99,13 @@ namespace VecEdit2D
             });
         }
 
-        public void showSelection()
+        public override void showSelection()
         {
-
+            MainWindow.Instance.showDot(p1.X, p1.Y);
+            MainWindow.Instance.showDot(p2.X, p2.Y);
+            MainWindow.Instance.showDot(p3.X, p3.Y);
+            MainWindow.Instance.showDot(p4.X, p4.Y);
+            MainWindow.Instance.showDot(center.X, center.Y);
         }
 
         public override ShapeGroup find(string name)
@@ -107,7 +117,7 @@ namespace VecEdit2D
             return null;
         }
 
-        public ShapeRectangle clone()
+         public override ShapeGroup clone()
         { return new ShapeRectangle(this); }
     }
 }
