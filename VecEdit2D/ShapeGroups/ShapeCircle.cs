@@ -18,10 +18,31 @@ namespace VecEdit2D
         public double r { get; set; }
 
         [JsonConstructor]
+        public ShapeCircle(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            shapeStyle style,
+            double r
+        ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            childGroups = new List<ShapeGroup>();
+            this.r = r;
+        }
+
+        [JsonConstructor]
+        public ShapeCircle() : base()
+        {
+
+        }
 
         public ShapeCircle(Point p1, Point p2, Color primary, Color secondary)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
             center.X = p1.X;
             center.Y = p1.Y;
             color = primary;
@@ -36,7 +57,7 @@ namespace VecEdit2D
 
         public ShapeCircle(double centerx, double centery, double r, Color primary, Color secondary)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
             center.X = centerx;
             center.Y = centery;
             color = primary;

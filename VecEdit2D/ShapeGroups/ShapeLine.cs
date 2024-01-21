@@ -19,6 +19,22 @@ namespace VecEdit2D
         public Point endPoint { get; set; }
 
         [JsonConstructor]
+        public ShapeLine(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            shapeStyle style,
+            Point startPoint,
+            Point endPoint
+        ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+        }
         public ShapeLine(Point p1, Point p2, Color primary, Color secondary)
         {
             startPoint = new Point(p1.X, p1.Y);
@@ -34,9 +50,15 @@ namespace VecEdit2D
 
         }
 
+        [JsonConstructor]
+        public ShapeLine() : base()
+        {
+
+        }
+
         public ShapeLine(ShapeLine shapeLine)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
 
             startPoint = new Point(shapeLine.startPoint.X, shapeLine.startPoint.Y);
             endPoint = new Point(shapeLine.endPoint.X, shapeLine.endPoint.Y);

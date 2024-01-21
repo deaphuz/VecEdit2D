@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Security.AccessControl;
 
 namespace VecEdit2D
 {
@@ -50,12 +51,20 @@ namespace VecEdit2D
 
         static string SerializeToJson<ShapeGroup>(ShapeGroup obj)
         {
-            return JsonConvert.SerializeObject(obj, Formatting.Indented);
+            return JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
 
         static ShapeGroup DeserializeFromJson<ShapeGroup>(string json)
         {
-            return JsonConvert.DeserializeObject<ShapeGroup>(json);
+            ShapeGroup deserializedItems = JsonConvert.DeserializeObject<ShapeGroup>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
+
+            return deserializedItems;
         }
     }
 }

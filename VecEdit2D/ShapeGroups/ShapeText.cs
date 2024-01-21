@@ -19,10 +19,31 @@ namespace VecEdit2D
         public double fontSize;
 
         [JsonConstructor]
+        public ShapeText(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            shapeStyle style,
+            string text,
+            double fontSize
+        ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            this.text = text;
+            this.fontSize = fontSize;
+        }
+
+        public ShapeText() : base()
+        {
+
+        }
 
         public ShapeText(Point p1, Color primary, Color secondary, string text, double fontSize)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
             center = new Point(p1.X, p1.Y);
             color = primary;
             strokeColor = secondary;
@@ -33,7 +54,7 @@ namespace VecEdit2D
 
         public ShapeText(ShapeText shapeText)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
             center = new Point(shapeText.center.X, shapeText.center.Y);
             color = shapeText.color;
             strokeColor = shapeText.strokeColor;
@@ -53,7 +74,7 @@ namespace VecEdit2D
         public override void scale(double sx, double sy, Point scaleCenter)
         {
             center = PointHelper.Scale(center, scaleCenter, sx, sy);
-            fontSize*= (sx + sy) / 2;
+            fontSize *= (sx + sy) / 2;
         }
 
         public override void setColor(Color color)

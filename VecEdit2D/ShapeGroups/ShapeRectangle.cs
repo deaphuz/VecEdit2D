@@ -20,7 +20,28 @@ namespace VecEdit2D
         public Point p3 { get; set; }
         public Point p4 { get; set; }
 
+
         [JsonConstructor]
+        public ShapeRectangle(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            shapeStyle style,
+            Point p1,
+            Point p2,
+            Point p3,
+            Point p4
+        ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+            this.p4 = p4;
+        }
         public ShapeRectangle(Point p1, Point p2, Color primary, Color secondary)
         {
             this.p1 = new Point(p1.X, p1.Y);
@@ -36,6 +57,11 @@ namespace VecEdit2D
             color = primary;
             strokeColor = secondary;
             name = "Shape " + ++Globals.ShapeID;
+
+        }
+
+        public ShapeRectangle() : base()
+        {
 
         }
 

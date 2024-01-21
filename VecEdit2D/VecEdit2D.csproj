@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands.cs" />
     <Compile Include="ShapeGroups\ShapeText.cs" />
     <Compile Include="Utils\Serializer.cs" />
     <Compile Include="Utils\Globals.cs" />

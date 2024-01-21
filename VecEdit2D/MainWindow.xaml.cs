@@ -28,7 +28,6 @@ namespace VecEdit2D
         private GroupView groupViewInstance;
         private AppState appStateInstance;
         private Image refImage;
-        private bool isContextMenuOpened;
 
         private List<Point> points;
 
@@ -42,7 +41,6 @@ namespace VecEdit2D
             appStateInstance = AppState.Instance;
             refImage = Image.Instance;
             points = new List<Point>();
-            isContextMenuOpened = false;
 
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
         }
@@ -231,7 +229,6 @@ namespace VecEdit2D
             Point position = Mouse.GetPosition(MainCanvas);
             MainCanvas.ContextMenu.PlacementTarget = MainCanvas;
             MainCanvas.ContextMenu.Placement = PlacementMode.MousePoint;
-            isContextMenuOpened = true;
         }
 
         //contextmenu item handlers

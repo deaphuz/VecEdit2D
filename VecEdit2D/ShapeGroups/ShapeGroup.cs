@@ -143,42 +143,8 @@ namespace VecEdit2D
         public virtual void draw(Canvas canvas)
         {
             if (childGroups != null)
-            {
                 foreach (ShapeGroup group in childGroups)
-                {
-                    ShapePolygon test = group as ShapePolygon;
-                    if(test != null)
-                    {
-                        test.draw(canvas);
-                    }
-/*
-                    if (group is ShapeCircle)
-                    {
-                        ((ShapeCircle)group).draw(canvas);
-                    }
-                    else if (group is ShapePolygon)
-                    {
-                        ((ShapePolygon)group).draw(canvas);
-                    }
-                    else if (group is ShapeLine)
-                    {
-                        ((ShapeLine)group).draw(canvas);
-                    }
-                    else if (group is ShapePolyline)
-                    {
-                        ((ShapePolyline)group).draw(canvas);
-                    }
-                    else if (group is ShapeRectangle)
-                    {
-                        ((ShapeRectangle)group).draw(canvas);
-                    }
-                    else if (group is ShapeText)
-                    {
-                        ((ShapeText)group).draw(canvas);
-                    }*/
-                }
-            }
-
+                    group.draw(canvas);
         }
 
         public virtual ShapeGroup find(string name)

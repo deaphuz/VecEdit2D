@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
-using System.Text.Json.Serialization;
 using System.Windows.Controls;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace VecEdit2D
 {
     [Serializable]
+  //[JsonObject(MemberSerialization.OptIn)]
     public class ShapePolygon : ShapeGroup
     {
         public List<Point> contour;
@@ -30,7 +31,13 @@ namespace VecEdit2D
             shapeStyle style
         ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
         {
+            childGroups = new List<ShapeGroup>();
             this.contour = contour;
+        }
+
+        public ShapePolygon() : base()
+        {
+
         }
 
         public ShapePolygon(List<Point> points, Color primary, Color secondary)
@@ -56,7 +63,7 @@ namespace VecEdit2D
 
         public ShapePolygon(ShapePolygon shapePolygon)
         {
-            childGroups = new List<ShapeGroup>();
+            childGroups = null;
 
             foreach(Point p in shapePolygon.contour)
             {

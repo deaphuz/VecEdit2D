@@ -16,7 +16,28 @@ namespace VecEdit2D
     {
         public List<Point> contour;
 
+
         [JsonConstructor]
+        public ShapePolyline(
+            List<ShapeGroup> childGroups,
+            string name,
+            Point center,
+            Color color,
+            List<Color> gradientColors,
+            Color strokeColor,
+            int strokeThickness,
+            List<Point> contour,
+            shapeStyle style
+            ) : base(childGroups, name, center, color, gradientColors, strokeColor, strokeThickness, style)
+        {
+            this.contour = contour;
+        }
+
+        public ShapePolyline(): base()
+        {
+
+        }
+
         public ShapePolyline(List<Point> points, Color primary, Color secondary)
         {
             contour = new List<Point>();

@@ -48,16 +48,6 @@ namespace VecEdit2D
             canvas.childGroups.Add(group);
         }
 
-        public void Remove(string name)
-        {
-     /*       ShapeGroup itemToRemove = canvas.FirstOrDefault(item => item.name == name);
-            if (itemToRemove != null)
-            {
-                WPFobservableCanvas.Remove(itemToRemove);
-                canvas.RemoveAll(item => item.name == name);
-            }*/
-        }
-
         public void New()
         {
             canvas = new ShapeGroup()
@@ -129,7 +119,6 @@ namespace VecEdit2D
 
             if (result == true)
             {
-                // Save document
                 string filename = dialog.FileName;
                 return filename;
             }
