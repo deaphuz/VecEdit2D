@@ -34,23 +34,14 @@ namespace VecEdit2D
             center = new Point(centerX, centerY);
             color = primary;
             strokeColor = secondary;
-            name = "Ksztalt " + ++Globals.ShapeID;
+            name = "Shape " + ++Globals.ShapeID;
 
         }
 
-        /*
-        public Polygon getWPFFigure()
+        public ShapeRectangle(ShapeRectangle shapeRectangle)
         {
-            return new Polygon
-            {
-                Stroke = new SolidColorBrush(strokeColor),
-                Fill = new SolidColorBrush(color),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                Points = new PointCollection { p1, p2, p3, p4 },
-            };
+            //TODO
         }
-        */
 
         public override void translate(double dx, double dy)
         {
@@ -77,6 +68,19 @@ namespace VecEdit2D
             p4 = PointHelper.Scale(p4, scaleCenter, sx, sy);
         }
 
+        public override void setColor(Color color)
+        {
+            this.color = color;
+        }
+        public override void setBorder(Color border)
+        {
+            this.strokeColor = border;
+        }
+        public override void setStyle(shapeStyle style)
+        {
+
+        }
+
         public override void draw(Canvas canvas)
         {
             canvas.Children.Add(new Polygon
@@ -89,6 +93,11 @@ namespace VecEdit2D
             });
         }
 
+        public void showSelection()
+        {
+
+        }
+
         public override ShapeGroup find(string name)
         {
             if (this.name == name)
@@ -97,5 +106,8 @@ namespace VecEdit2D
             }
             return null;
         }
+
+        public ShapeRectangle clone()
+        { return new ShapeRectangle(this); }
     }
 }

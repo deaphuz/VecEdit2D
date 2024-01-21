@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VecEdit2D"
         mc:Ignorable="d"
-        Title="Toolbox" Height="950" Width="200">
+        Title="Group view" Height="950" Width="200">
     <Grid>
         <TreeView Name="LayersView" ItemsSource="{Binding DataContext}">
             <TreeView.ItemTemplate>

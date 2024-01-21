@@ -28,6 +28,9 @@ namespace VecEdit2D
         void setBorder(Color border);
         void setStyle(shapeStyle style);
         ShapeGroup find(string name);
+
+        //for prototype
+        ShapeGroup clone();
     }
 
     [Serializable]
@@ -54,6 +57,16 @@ namespace VecEdit2D
             center.Y = centery;
             color = primary;
             strokeColor = secondary;
+            name = "Group " + ++Globals.ShapeID;
+        }
+
+        public ShapeGroup(ShapeGroup shapeGroup)
+        {
+            childGroups = new List<ShapeGroup>();
+            center.X = shapeGroup.center.X;
+            center.Y = shapeGroup.center.Y;
+           // color = new Color(shapeGroup.color);
+            //strokeColor = secondary;
             name = "Group " + ++Globals.ShapeID;
         }
 
@@ -110,19 +123,6 @@ namespace VecEdit2D
                 foreach (ShapeGroup group in childGroups)
                     group.draw(canvas);
         }
-        /*
-        public virtual void getWPFFigure()
-        {
-            if(childGroups != null)
-            {
-                foreach (ShapeGroup group in childGroups)
-                {
-                    group.getWPFFigure();
-                }
-            }
-            
-        }
-        */
 
         public virtual ShapeGroup find(string name)
         {
@@ -157,5 +157,12 @@ namespace VecEdit2D
             }
             return null;
         }
+
+        public void showSelection()
+        {
+
+        }
+        public virtual ShapeGroup clone()
+        { return new ShapeGroup(this); }
     }
 }

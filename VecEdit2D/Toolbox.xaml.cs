@@ -24,9 +24,6 @@ namespace VecEdit2D
         public System.Windows.Media.Color primaryColor { get; set; }
         public System.Windows.Media.Color secondaryColor { get; set; }
         public double StrokeThickness { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
-        public double Radius { get; set; }
 
         //others
         public double scaleFactor { get; set; }
@@ -88,14 +85,12 @@ namespace VecEdit2D
 
         private void StrokeThicknessEventHandler(object sender, TextChangedEventArgs args)
         {
-            StrokeThickness = double.Parse(StrokeThicknessTextBox.Text);
+            double strokeThickness = 0.0;
+
+            if (double.TryParse(StrokeThicknessTextBox.Text, out strokeThickness))
+                StrokeThickness = strokeThickness;
         }
-/*
-        private void RadiusEventHandler(object sender, TextChangedEventArgs args)
-        {
-            Radius = double.Parse(RadiusTextBox.Text);
-        }
-      */
+
         private void PrimaryColor_Click(object sender, RoutedEventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();

@@ -33,22 +33,14 @@ namespace VecEdit2D
             center = new Point(centerX, centerY);
             color = primary;
             strokeColor = secondary;
-            name = "Ksztalt " + ++Globals.ShapeID;
+            name = "Shape " + ++Globals.ShapeID;
 
         }
 
-        /*
-        public Polyline getWPFFigure()
+        public ShapePolyline(ShapePolyline shapePolyline)
         {
-            return new Polyline
-            {
-                Stroke = new SolidColorBrush(color),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                Points = new PointCollection(contour),
-            };
+            //TODO
         }
-        */
 
         public override void translate(double dx, double dy)
         {
@@ -75,6 +67,19 @@ namespace VecEdit2D
             }
         }
 
+        public override void setColor(Color color)
+        {
+            this.color = color;
+        }
+        public override void setBorder(Color border)
+        {
+            this.strokeColor = border;
+        }
+        public override void setStyle(shapeStyle style)
+        {
+
+        }
+
         public override void draw(Canvas canvas)
         {
             canvas.Children.Add(new Polyline
@@ -86,6 +91,11 @@ namespace VecEdit2D
             });
         }
 
+        public void showSelection()
+        {
+
+        }
+
         public override ShapeGroup find(string name)
         {
             if (this.name == name)
@@ -95,5 +105,7 @@ namespace VecEdit2D
             return null;
         }
 
+        public ShapePolyline clone()
+        { return new ShapePolyline(this); }
     }
 }

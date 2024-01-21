@@ -19,6 +19,21 @@ namespace VecEdit2D
 
         [JsonConstructor]
 
+        public ShapeCircle(Point p1, Point p2, Color primary, Color secondary)
+        {
+            childGroups = new List<ShapeGroup>();
+            center.X = p1.X;
+            center.Y = p1.Y;
+            color = primary;
+            strokeColor = secondary;
+
+            double dx = p2.X - p1.X;
+            double dy = p2.Y - p1.Y;
+
+            r = Math.Sqrt(dx*dx + dy * dy);
+            name = "Shape " + ++Globals.ShapeID;
+        }
+
         public ShapeCircle(double centerx, double centery, double r, Color primary, Color secondary)
         {
             childGroups = new List<ShapeGroup>();
@@ -30,24 +45,10 @@ namespace VecEdit2D
             name = "Shape " + ++Globals.ShapeID;
         }
 
-        /*
-        public Ellipse getWPFFigure()
-        {
-            return new Ellipse
-            {
-                Stroke = new SolidColorBrush(strokeColor),
-                Fill = new SolidColorBrush(color),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                Width = 2 * r,
-                Height = 2 * r,
-            };
-        }
-        */
 
-        public double getWPFRadius()
+        public ShapeCircle(ShapeCircle shapeCircle)
         {
-            return this.r;
+            //TODO
         }
 
         public override void translate(double dx, double dy)
@@ -64,6 +65,24 @@ namespace VecEdit2D
             r *= (sx + sy) / 2;
         }
 
+        public override void setColor(Color color)
+        {
+            this.color = color;
+        }
+        public override void setBorder(Color border)
+        {
+            this.strokeColor = border;
+        }
+        public override void setStyle(shapeStyle style)
+        {
+
+        }
+
+        public void showSelection()
+        {
+
+        }
+
         public override void draw(Canvas canvas)
         {
             Ellipse el = new Ellipse
@@ -76,8 +95,8 @@ namespace VecEdit2D
                 Height = 2 * r,
             };
             canvas.Children.Add(el);
-            Canvas.SetLeft(el, center.X - getWPFRadius());
-            Canvas.SetTop(el, center.Y - getWPFRadius());
+            Canvas.SetLeft(el, center.X - r);
+            Canvas.SetTop(el, center.Y - r);
         }
 
         public override ShapeGroup find(string name)
@@ -88,5 +107,8 @@ namespace VecEdit2D
             }
             return null;
         }
+
+        public ShapeCircle clone()
+        { return new ShapeCircle(this); }
     }
 }

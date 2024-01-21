@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Text.Json.Serialization;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 
 namespace VecEdit2D
 {
@@ -29,24 +30,14 @@ namespace VecEdit2D
             color = primary;
             strokeColor = secondary;
 
-            name = "Ksztalt " + ++Globals.ShapeID;
+            name = "Shape " + ++Globals.ShapeID;
 
         }
-        /*
-        public Line getWPFFigure()
+
+        public ShapeLine(ShapeLine shapeLine)
         {
-            return new Line
-            {
-                Stroke = new SolidColorBrush(color),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
-                X1 = startPoint.X,
-                X2 = endPoint.X,
-                Y1 = startPoint.Y,
-                Y2 = endPoint.Y,
-            };
+            //TODO
         }
-        */
 
         public override void translate(double dx, double dy)
         {
@@ -68,18 +59,37 @@ namespace VecEdit2D
             endPoint = PointHelper.Scale(endPoint, scaleCenter, sx, sy);
         }
 
+
+        public override void setColor(Color color)
+        {
+            this.color = color;
+        }
+        public override void setBorder(Color border)
+        {
+            this.strokeColor = border;
+        }
+        public override void setStyle(shapeStyle style)
+        {
+
+        }
+
         public override void draw(Canvas canvas)
         {
             canvas.Children.Add(new Line
             {
                 Stroke = new SolidColorBrush(color),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center,
                 X1 = startPoint.X,
                 X2 = endPoint.X,
                 Y1 = startPoint.Y,
                 Y2 = endPoint.Y,
             });
+        }
+
+        public void showSelection()
+        {
+
         }
 
         public override ShapeGroup find(string name)
@@ -90,5 +100,8 @@ namespace VecEdit2D
             }
             return null;
         }
+
+        public ShapeLine clone()
+        { return new ShapeLine(this); }
     }
 }

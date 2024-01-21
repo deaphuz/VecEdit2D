@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VecEdit2D.Views;
 
 namespace VecEdit2D
 {
@@ -61,7 +62,7 @@ namespace VecEdit2D
             refImage.canvas.draw(MainCanvas);
         }
 
-        private void showDot()
+        private void showDot(double x, double y)
         {
             Ellipse tmp = new Ellipse
             {
@@ -72,8 +73,13 @@ namespace VecEdit2D
                 Fill = null,
             };
             MainCanvas.Children.Add(tmp);
-            Canvas.SetLeft(tmp, Mouse.GetPosition(MainCanvas).X);
-            Canvas.SetTop(tmp, Mouse.GetPosition(MainCanvas).Y);
+            Canvas.SetLeft(tmp, x);
+            Canvas.SetTop(tmp, y);
+        }
+
+        private void showSelection()
+        {
+            points = new List<Point>();
         }
 
         private void ClearSelection()
@@ -95,17 +101,10 @@ namespace VecEdit2D
                 return;
             }
 
-            if (e.OriginalSource is Shape)
-            {
-                Shape activeRectangle = (Shape)e.OriginalSource;
-                MainCanvas.Children.Remove(activeRectangle);
-            }
-            else
-            {
                 points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
 
                 //show dot  : )
-                showDot();
+                showDot(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y);
 
                 switch (toolboxInstance.currentShape)
                 {
@@ -121,10 +120,10 @@ namespace VecEdit2D
                             ClearSelection();
                         break;
                     case "circle":
-                        if (points.Count == 1)
+                        if (points.Count == 2)
                         {
                             //add shape
-                            ShapeCircle newShape = new ShapeCircle(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, 30, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                            ShapeCircle newShape = new ShapeCircle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
                             appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
                             ClearSelection();
                         }
@@ -157,7 +156,7 @@ namespace VecEdit2D
                             ClearSelection();
                         break;
                 }
-            }
+            
             if (points.Count == 0)
                 RedrawImage();
 
@@ -170,7 +169,6 @@ namespace VecEdit2D
         {
             if (points.Count > 0)
             {
-
                 if (points.Count > 2) //minimum 3
                 {
                     switch (toolboxInstance.currentShape)
@@ -343,6 +341,24 @@ namespace VecEdit2D
         private void QuitItem_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void RemoveFigureItem_Click(object sender, RoutedEventArgs e)
+        {
+            var inputDialog = new InputDialog("Info", "Enter name of item to delete (must be in selected group): ");
+
+            if (inputDialog.ShowDialog() == true)
+            {
+                if(appStateInstance.refSelectedShapeGroup.remove(inputDialog.outputBox.Text) == null)
+                {
+                    System.Windows.MessageBox.Show("Item not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                RedrawImage();
+                //update GroupView bar
+                groupViewInstance._Update(refImage.canvas);
+            }
         }
     }
 }
