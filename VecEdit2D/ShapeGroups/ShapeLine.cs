@@ -50,24 +50,17 @@ namespace VecEdit2D
 
         }
 
-        [JsonConstructor]
         public ShapeLine() : base()
         {
 
         }
 
-        public ShapeLine(ShapeLine shapeLine)
+        public ShapeLine(ShapeLine original) : base(original)
         {
-            childGroups = null;
-
-            startPoint = new Point(shapeLine.startPoint.X, shapeLine.startPoint.Y);
-            endPoint = new Point(shapeLine.endPoint.X, shapeLine.endPoint.Y);
-            center = new Point(shapeLine.center.X, shapeLine.center.Y);
-            color = shapeLine.color;
-            strokeColor = shapeLine.strokeColor;
-
-            name = "Shape " + ++Globals.ShapeID;
+            startPoint = new Point(original.startPoint.X, original.startPoint.Y);
+            endPoint = new Point(original.endPoint.X, original.endPoint.Y);
         }
+       
 
         public override void showSelection()
         {

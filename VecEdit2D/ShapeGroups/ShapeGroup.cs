@@ -83,26 +83,20 @@ namespace VecEdit2D
             name = "Group " + ++Globals.ShapeID;
         }
 
-        public ShapeGroup(ShapeGroup shapeGroup)
+        public ShapeGroup() { }
+
+        public ShapeGroup(ShapeGroup original)
         {
-            childGroups = new List<ShapeGroup>();
-            center.X = shapeGroup.center.X;
-            center.Y = shapeGroup.center.Y;
-           // color = new Color(shapeGroup.color);
-            //strokeColor = secondary;
+            childGroups = original.childGroups?.Select(group => group.clone()).ToList();
             name = "Group " + ++Globals.ShapeID;
+            center = new Point(original.center.X, original.center.Y);
+            color = original.color;
+            gradientColors = original.gradientColors?.ToList();
+            strokeColor = original.strokeColor;
+            strokeThickness = original.strokeThickness;
+            style = original.style;
         }
 
-        //TODO NEW CONSTRUCTORS
-        /*
-        public ShapeGroup(double centerx, double centery)
-        {
-            childGroups = new List<Group>();
-            center.X = centerx;
-            center.Y = centery;
-        }*/
-
-        public ShapeGroup() { }
         public virtual void translate(double dx, double dy)
         {
             if (childGroups != null)

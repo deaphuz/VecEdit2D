@@ -169,19 +169,7 @@ namespace VecEdit2D
             }
         }
 
-        private void ScaleButton_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
 
-        private void RotateButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void TranslateButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

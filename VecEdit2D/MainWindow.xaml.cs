@@ -42,7 +42,6 @@ namespace VecEdit2D
             appStateInstance = AppState.Instance;
             refImage = Image.Instance;
             points = new List<Point>();
-
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
         }
 
@@ -240,8 +239,8 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //make translation
-            appStateInstance.refSelectedShapeGroup.translate(toolboxInstance.trX, toolboxInstance.trY);
-
+            Command translateCommand = new TranslateCommand(appStateInstance.refSelectedShapeGroup, toolboxInstance.trX, toolboxInstance.trY);
+            translateCommand.execute();
             //redraw image
             RedrawImage();
 
@@ -253,8 +252,8 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //make rotation
-            appStateInstance.refSelectedShapeGroup.rotate(toolboxInstance.rotAngle * (Math.PI / 180.0), appStateInstance.refSelectedShapeGroup.center);
-
+            Command rotateCommand = new RotateCommand(appStateInstance.refSelectedShapeGroup, toolboxInstance.rotAngle);
+            rotateCommand.execute();
             //redraw image
             RedrawImage();
         }
@@ -265,7 +264,8 @@ namespace VecEdit2D
             MainCanvas.Children.Clear();
 
             //scale
-            appStateInstance.refSelectedShapeGroup.scale(toolboxInstance.scaleFactor, toolboxInstance.scaleFactor, appStateInstance.refSelectedShapeGroup.center);
+            Command scaleCommand = new ScaleCommand(appStateInstance.refSelectedShapeGroup, toolboxInstance.scaleFactor);
+            scaleCommand.execute();
 
             //redraw image
             RedrawImage();
@@ -391,8 +391,8 @@ namespace VecEdit2D
                 //update GroupView bar
                 groupViewInstance._Update(refImage.canvas);
             }
-        }
 
+        }
         private void HandleWindowClosing(object sender, CancelEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -402,5 +402,7 @@ namespace VecEdit2D
         {
             return MainCanvas;
         }
+
+
     }
 }

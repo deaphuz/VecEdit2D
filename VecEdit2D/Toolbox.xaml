@@ -44,11 +44,7 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <StackPanel>
-                <Button Content="Scale" Click="ScaleButton_Click" Margin="20,15,20,2"/>
-                <Button Content="Rotate" Click="RotateButton_Click" Margin="20,5,20,2"/>
-                <Button Content="Translate" Click="TranslateButton_Click" Margin="20,5,20,2"/>
-            </StackPanel>
+
 
 
         </Grid>

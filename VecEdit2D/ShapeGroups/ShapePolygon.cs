@@ -59,21 +59,15 @@ namespace VecEdit2D
 
         }
 
-
-        public ShapePolygon(ShapePolygon shapePolygon)
+        public ShapePolygon(ShapePolygon original) : base(original)
         {
-            childGroups = null;
-
-            foreach(Point p in shapePolygon.contour)
+            contour = new List<Point>(original.contour.Count);
+            foreach (var point in original.contour)
             {
-                contour.Add(new Point(p.X, p.Y));
+                contour.Add(new Point(point.X, point.Y));
             }
-            center = new Point(shapePolygon.center.X, shapePolygon.center.Y);
-            color = shapePolygon.color;
-            strokeColor = shapePolygon.strokeColor;
-
-            name = "Shape " + ++Globals.ShapeID;
         }
+
 
         public override void translate(double dx, double dy)
         {
