@@ -60,15 +60,14 @@ namespace VecEdit2D
 
         }
 
-        public ShapeRectangle() : base()
+        public ShapeRectangle(ShapeRectangle original) : base(original)
         {
-
+            p1 = new Point(original.p1.X, original.p1.Y);
+            p2 = new Point(original.p2.X, original.p2.Y);
+            p3 = new Point(original.p3.X, original.p3.Y);
+            p4 = new Point(original.p4.X, original.p4.Y);
         }
 
-        public ShapeRectangle(ShapeRectangle shapeRectangle)
-        {
-            //TODO
-        }
 
         public override void translate(double dx, double dy)
         {

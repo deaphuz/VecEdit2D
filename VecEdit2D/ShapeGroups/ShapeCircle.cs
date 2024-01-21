@@ -34,7 +34,6 @@ namespace VecEdit2D
             this.r = r;
         }
 
-        [JsonConstructor]
         public ShapeCircle() : base()
         {
 
@@ -66,10 +65,10 @@ namespace VecEdit2D
             name = "Shape " + ++Globals.ShapeID;
         }
 
-
-        public ShapeCircle(ShapeCircle shapeCircle)
+        //clone constructor
+        private ShapeCircle(ShapeCircle original) : base(original)
         {
-            //TODO
+            this.r = original.r;
         }
 
         public override void translate(double dx, double dy)

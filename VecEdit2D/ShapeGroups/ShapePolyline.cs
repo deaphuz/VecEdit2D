@@ -58,10 +58,15 @@ namespace VecEdit2D
 
         }
 
-        public ShapePolyline(ShapePolyline shapePolyline)
+        public ShapePolyline(ShapePolyline original) : base(original)
         {
-            //TODO
+            contour = new List<Point>(original.contour.Count);
+            foreach (var point in original.contour)
+            {
+                contour.Add(new Point(point.X, point.Y));
+            }
         }
+
 
         public override void translate(double dx, double dy)
         {

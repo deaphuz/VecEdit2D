@@ -52,15 +52,10 @@ namespace VecEdit2D
             name = "Shape " + ++Globals.ShapeID;
         }
 
-        public ShapeText(ShapeText shapeText)
+        public ShapeText(ShapeText original) : base(original)
         {
-            childGroups = null;
-            center = new Point(shapeText.center.X, shapeText.center.Y);
-            color = shapeText.color;
-            strokeColor = shapeText.strokeColor;
-            this.text = shapeText.text;
-            this.fontSize = shapeText.fontSize;
-            name = "Shape " + ++Globals.ShapeID;
+            text = original.text;
+            fontSize = original.fontSize;
         }
 
         public override void translate(double dx, double dy)
