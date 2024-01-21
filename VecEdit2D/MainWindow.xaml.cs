@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
@@ -379,6 +380,11 @@ namespace VecEdit2D
                 //update GroupView bar
                 groupViewInstance._Update(refImage.canvas);
             }
+        }
+
+        private void HandleWindowClosing(object sender, CancelEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

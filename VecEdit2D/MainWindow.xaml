@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:VecEdit2D"
         mc:Ignorable="d"
         Title="Canvas" Height="950" Width="1200"
-        PreviewKeyDown="OnKeyDownHandler">
+        PreviewKeyDown="OnKeyDownHandler"
+        Closing="HandleWindowClosing">
     <Window.Resources>
         <ContextMenu x:Key="CanvasContextMenu" Name="canvasContextMenu">
             <MenuItem Header="Translate" Click="TranslateItem_Click"/>
