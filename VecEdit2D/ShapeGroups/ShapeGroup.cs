@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VecEdit2D.Utils;
 
 namespace VecEdit2D
 {   
@@ -43,10 +44,9 @@ namespace VecEdit2D
         //for scaling and rotating
         //group, has x and y
         public Point center;
-        public Color color { get; set; }
         public List<Color> gradientColors { get; set; }
-
-        public Color strokeColor { get; set; }
+        public SerializableColor color { get; set; }
+        public SerializableColor strokeColor { get; set; }
         public int strokeThickness { get; set; }
 
         public shapeStyle style;
@@ -56,9 +56,9 @@ namespace VecEdit2D
             List<ShapeGroup> childGroups,
             string name,
             Point center,
-            Color color,
+            SerializableColor color,
             List<Color> gradientColors,
-            Color strokeColor,
+            SerializableColor strokeColor,
             int strokeThickness,
             shapeStyle style
         )

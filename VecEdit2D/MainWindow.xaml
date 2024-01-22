@@ -38,7 +38,8 @@
                 <MenuItem Header="_Scale"  Click="ScaleItem_Click"/>
                 <MenuItem Header="_Rotate" Click="RotateItem_Click"/>
             </MenuItem>
-
+            <MenuItem Header="Undo" Click="CanvasUndo_Click" />
+            <MenuItem Header="Redo" Click="CanvasRedo_Click" />
         </Menu>
 
         <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" ContextMenu="{StaticResource CanvasContextMenu}" Focusable="True" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}"/>

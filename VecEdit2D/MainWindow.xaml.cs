@@ -28,6 +28,7 @@ namespace VecEdit2D
         private GroupView groupViewInstance;
         private AppState appStateInstance;
         private Image refImage;
+        private CanvasHistory.CanvasCaretaker history;
 
         private List<Point> points;
 
@@ -40,6 +41,7 @@ namespace VecEdit2D
             groupViewInstance.Show();
             appStateInstance = AppState.Instance;
             refImage = Image.Instance;
+            history = new CanvasHistory.CanvasCaretaker();
             points = new List<Point>();
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
         }
@@ -60,8 +62,35 @@ namespace VecEdit2D
         {
             MainCanvas.Children.Clear();
             refImage.canvas.draw(MainCanvas);
+            history.SaveState(refImage);
         }
 
+        public void CanvasRedo_Click(object sender, EventArgs e)
+        {
+            var state = history.Redo();
+            if (state != null)
+            {
+                MainCanvas.Children.Clear();
+                state.canvas.draw(MainCanvas);
+                UpdateRefImage(state);
+            }
+        }
+
+        public void CanvasUndo_Click(object sender, EventArgs e)
+        {
+            var state = history.Undo();
+            if (state != null)
+            {
+                MainCanvas.Children.Clear();
+                state.canvas.draw(MainCanvas);
+                UpdateRefImage(state);
+            }
+        }
+        private void UpdateRefImage(Image newState)
+        {
+
+            refImage.canvas = newState.canvas;
+        }
         public void showDot(double x, double y)
         {
             Ellipse tmp = new Ellipse
@@ -86,7 +115,6 @@ namespace VecEdit2D
         private void ClearSelection()
         {
             points = new List<Point>();
-            RedrawImage();
         }
 
         private void HandleLMBClick(object sender, MouseButtonEventArgs e)
