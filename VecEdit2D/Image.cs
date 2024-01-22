@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
+using System.Xml.Serialization;
 
 namespace VecEdit2D
 {
@@ -61,68 +61,33 @@ namespace VecEdit2D
             };
         }
 
+        //read supports only JSON
         public void Read()
         {
-            string filename = "";
-            try { filename = OpenReadDialog(); }
-            catch (Exception) { System.Windows.MessageBox.Show("Invalid file path", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-
-            Serializer serializer = new Serializer();
-
-            ShapeGroup output = new ShapeGroup();
-            try { output = serializer.ReadFromJson(filename); }
-            catch (Exception) { System.Windows.MessageBox.Show("Failed to read the image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            System.Windows.MessageBox.Show("Image read", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            canvas = output;
+            Serializer serializer = new JsonSerializer();
+            canvas = serializer.Deserialize();
         }
 
-        public void Save()
+        public void Save(System.Windows.Controls.Canvas wpfcanvas, string exportType)
         {
-            //save to db
-            string filename = "";
-            try { filename = OpenSaveDialog(); }
-            catch (Exception) { System.Windows.MessageBox.Show("Invalid file path", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-
-            ShapeGroup output = Image.Instance.canvas;
-            Serializer serializer = new Serializer();
-            try { serializer.SaveToJson(output, filename); }
-            catch (Exception) { System.Windows.MessageBox.Show("Failed to save the image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            System.Windows.MessageBox.Show("Image saved", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        public string OpenReadDialog()
-        {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "data"; // Default file name
-            dialog.DefaultExt = ".json"; // Default extension
-            dialog.Filter = "JSON files (.json)|*.json"; // Filter
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
+            Serializer serializer = null;
+            Object data = null;
+            switch (exportType)
             {
-                string filename = dialog.FileName;
-                return filename;
+                case "json":
+                    serializer = new JsonSerializer();
+                    data = canvas;
+                    break;
+                case "xaml":
+                    serializer = new XamlSerializer();
+                    data = wpfcanvas;
+                    break;
+                case "svg":
+                    serializer = new SvgSerializer();
+                    data = wpfcanvas;
+                    break;
             }
-            else return null;
-        }
-
-        public string OpenSaveDialog()
-        {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.FileName = "data"; // Default file name
-            dialog.DefaultExt = ".json"; // Default extension
-            dialog.Filter = "JSON files (.json)|*.json"; // Filter
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
-            {
-                string filename = dialog.FileName;
-                return filename;
-            }
-            else return null;
+            serializer.Serialize(data);
         }
     }
 }

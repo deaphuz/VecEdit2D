@@ -57,7 +57,7 @@ namespace VecEdit2D
             }
         }
 
-        private void RedrawImage()
+        public void RedrawImage()
         {
             MainCanvas.Children.Clear();
             refImage.canvas.draw(MainCanvas);
@@ -356,8 +356,19 @@ namespace VecEdit2D
 
         private void SaveFileItem_Click(object sender, RoutedEventArgs e)
         {
-            Image.Instance.Save();
+            Image.Instance.Save(null, "json");
         }
+        private void ExportXAMLItem_Click(object sender, RoutedEventArgs e)
+        {
+            RedrawImage();
+            Image.Instance.Save(MainCanvas, "xaml");
+        }
+
+        private void ExportSVGItem_Click(object sender, RoutedEventArgs e)
+        {
+            Image.Instance.Save(MainCanvas, "svg");
+        }
+
 
         private void QuitItem_Click(object sender, RoutedEventArgs e)
         {
@@ -380,13 +391,17 @@ namespace VecEdit2D
                 //update GroupView bar
                 groupViewInstance._Update(refImage.canvas);
             }
-        }
 
+        }
         private void HandleWindowClosing(object sender, CancelEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
         }
 
+        public Canvas getMainCanvas()
+        {
+            return MainCanvas;
+        }
 
 
     }
