@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:VecEdit2D"
         mc:Ignorable="d"
         Title="Canvas" Height="950" Width="1200"
-        PreviewKeyDown="OnKeyDownHandler"
-        Closing="HandleWindowClosing">
+        PreviewKeyDown="OnKeyDownHandler">
     <Window.Resources>
         <ContextMenu x:Key="CanvasContextMenu" Name="canvasContextMenu">
             <MenuItem Header="Translate" Click="TranslateItem_Click"/>
@@ -28,10 +27,8 @@
         <Menu DockPanel.Dock="Top" FontSize="14">
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Click="NewFileItem_Click" />
-                <MenuItem Header="_Read (json)"  Click="ReadFileItem_Click"/>
-                <MenuItem Header="_Save (json)" Click="SaveFileItem_Click"/>
-                <MenuItem Header="_Export (xaml)" Click="ExportXAMLItem_Click"/>
-                <MenuItem Header="_Export (svg)" Click="ExportSVGItem_Click"/>
+                <MenuItem Header="_Read"  Click="ReadFileItem_Click"/>
+                <MenuItem Header="_Save" Click="SaveFileItem_Click"/>
                 <Separator />
                 <MenuItem Header="_Quit" Click="QuitItem_Click" />
             </MenuItem>
@@ -41,7 +38,8 @@
                 <MenuItem Header="_Scale"  Click="ScaleItem_Click"/>
                 <MenuItem Header="_Rotate" Click="RotateItem_Click"/>
             </MenuItem>
-
+            <MenuItem Header="Undo" Click="CanvasUndo_Click" />
+            <MenuItem Header="Redo" Click="CanvasRedo_Click" />
         </Menu>
 
         <Canvas Name="MainCanvas" Background="white" MouseLeftButtonDown="HandleLMBClick" MouseRightButtonDown="HandleRMBClick" ContextMenu="{StaticResource CanvasContextMenu}" Focusable="True" Margin="0,0,0,0" Width="{Binding ActualWidth, ElementName=window, Mode=OneWay}"/>

@@ -29,6 +29,7 @@ namespace VecEdit2D
         private GroupView groupViewInstance;
         private AppState appStateInstance;
         private Image refImage;
+        private CanvasHistory.CanvasCaretaker history;
 
         private List<Point> points;
 
@@ -41,6 +42,7 @@ namespace VecEdit2D
             groupViewInstance.Show();
             appStateInstance = AppState.Instance;
             refImage = Image.Instance;
+            history = new CanvasHistory.CanvasCaretaker();
             points = new List<Point>();
             appStateInstance.refSelectedShapeGroup = refImage.canvas;
         }
@@ -61,8 +63,35 @@ namespace VecEdit2D
         {
             MainCanvas.Children.Clear();
             refImage.canvas.draw(MainCanvas);
+            history.SaveState(refImage);
         }
 
+        public void CanvasRedo_Click(object sender, EventArgs e)
+        {
+            var state = history.Redo();
+            if (state != null)
+            {
+                MainCanvas.Children.Clear();
+                state.canvas.draw(MainCanvas);
+                UpdateRefImage(state);
+            }
+        }
+
+        public void CanvasUndo_Click(object sender, EventArgs e)
+        {
+            var state = history.Undo();
+            if (state != null)
+            {
+                MainCanvas.Children.Clear();
+                state.canvas.draw(MainCanvas);
+                UpdateRefImage(state);
+            }
+        }
+        private void UpdateRefImage(Image newState)
+        {
+
+            refImage.canvas = newState.canvas;
+        }
         public void showDot(double x, double y)
         {
             Ellipse tmp = new Ellipse
@@ -87,7 +116,6 @@ namespace VecEdit2D
         private void ClearSelection()
         {
             points = new List<Point>();
-            RedrawImage();
         }
 
         private void HandleLMBClick(object sender, MouseButtonEventArgs e)
@@ -95,68 +123,68 @@ namespace VecEdit2D
 
             //stop user if he not selected group
             Type type = typeof(ShapeGroup);
-            if (appStateInstance.refSelectedShapeGroup.GetType() != type )
+            if (appStateInstance.refSelectedShapeGroup.GetType() != type)
             {
                 System.Windows.MessageBox.Show("Select group instead of shape", "Alert", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-                points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
+            points.Add(new Point(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y));
 
-                //show dot  : )
-                showDot(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y);
+            //show dot  : )
+            showDot(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y);
 
-                switch (toolboxInstance.currentShape)
-                {
-                    case "group":
-                        if (points.Count == 1)
-                        {
-                            //add shape
-                            ShapeGroup newShape = new ShapeGroup(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            ClearSelection();
-                        }
-                        else if (points.Count > 1)
-                            ClearSelection();
-                        break;
-                    case "circle":
-                        if (points.Count == 2)
-                        {
-                            //add shape
-                            ShapeCircle newShape = new ShapeCircle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            ClearSelection();
-                        }
-                        else if (points.Count > 1)
-                            ClearSelection();
-                        break;
+            switch (toolboxInstance.currentShape)
+            {
+                case "group":
+                    if (points.Count == 1)
+                    {
+                        //add shape
+                        ShapeGroup newShape = new ShapeGroup(Mouse.GetPosition(MainCanvas).X, Mouse.GetPosition(MainCanvas).Y, toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                        appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                        ClearSelection();
+                    }
+                    else if (points.Count > 1)
+                        ClearSelection();
+                    break;
+                case "circle":
+                    if (points.Count == 2)
+                    {
+                        //add shape
+                        ShapeCircle newShape = new ShapeCircle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                        appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                        ClearSelection();
+                    }
+                    else if (points.Count > 1)
+                        ClearSelection();
+                    break;
 
 
-                    case "rectangle":
-                        if (points.Count == 2)
-                        {
-                            //add shape
-                            ShapeRectangle newShape = new ShapeRectangle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
-                            ClearSelection();
-                        }
-                        else if (points.Count > 2)
-                            ClearSelection();
-                        break;
-                    case "straightLine":
-                        if (points.Count == 2)
-                        {
-                            //add shape
-                            ShapeLine newShape = new ShapeLine(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
-                            appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                case "rectangle":
+                    if (points.Count == 2)
+                    {
+                        //add shape
+                        ShapeRectangle newShape = new ShapeRectangle(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                        appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
+                        ClearSelection();
+                    }
+                    else if (points.Count > 2)
+                        ClearSelection();
+                    break;
+                case "straightLine":
+                    if (points.Count == 2)
+                    {
+                        //add shape
+                        ShapeLine newShape = new ShapeLine(points[0], points[1], toolboxInstance.primaryColor, toolboxInstance.secondaryColor);
+                        appStateInstance.refSelectedShapeGroup.childGroups.Add(newShape);
 
-                            ClearSelection();
-                        }
-                        else if (points.Count > 2)
-                            ClearSelection();
-                        break;
-                }
-            
+                        ClearSelection();
+                    }
+                    else if (points.Count > 2)
+                        ClearSelection();
+                    break;
+            }
+
             if (points.Count == 0)
                 RedrawImage();
 
@@ -369,7 +397,6 @@ namespace VecEdit2D
             Image.Instance.Save(MainCanvas, "svg");
         }
 
-
         private void QuitItem_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
@@ -381,7 +408,7 @@ namespace VecEdit2D
 
             if (inputDialog.ShowDialog() == true)
             {
-                if(appStateInstance.refSelectedShapeGroup.remove(inputDialog.outputBox.Text) == false)
+                if (appStateInstance.refSelectedShapeGroup.remove(inputDialog.outputBox.Text) == false)
                 {
                     System.Windows.MessageBox.Show("Item not found \n(notice that to remove an item, you must activate\ndelete option in the group in which it is located)", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

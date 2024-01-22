@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
-using System.Xml.Serialization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace VecEdit2D
 {
@@ -29,7 +24,7 @@ namespace VecEdit2D
                 strokeThickness = 2,
             };
         }
-    
+
         public static Image Instance
         {
             get
@@ -89,5 +84,17 @@ namespace VecEdit2D
             }
             serializer.Serialize(data);
         }
+
+        public static T DeepCopy<T>(T obj)
+        {
+            using (var ms = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(ms, obj);
+                ms.Position = 0;
+                return (T)formatter.Deserialize(ms);
+            }
+        }
     }
 }
+

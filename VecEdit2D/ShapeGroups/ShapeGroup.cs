@@ -8,9 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows;
 using System.Runtime.InteropServices.WindowsRuntime;
+using VecEdit2D.Utils;
 
 namespace VecEdit2D
-{   
+{
     public enum shapeStyle
     {
         NORMAL,
@@ -36,17 +37,16 @@ namespace VecEdit2D
     [Serializable]
     public class ShapeGroup : Group
     {
-       // [JsonProperty]
+        // [JsonProperty]
         public List<ShapeGroup> childGroups;
         public string name;
 
         //for scaling and rotating
         //group, has x and y
         public Point center;
-        public Color color { get; set; }
         public List<Color> gradientColors { get; set; }
-
-        public Color strokeColor { get; set; }
+        public SerializableColor color { get; set; }
+        public SerializableColor strokeColor { get; set; }
         public int strokeThickness { get; set; }
 
         public shapeStyle style;
@@ -56,9 +56,9 @@ namespace VecEdit2D
             List<ShapeGroup> childGroups,
             string name,
             Point center,
-            Color color,
+            SerializableColor color,
             List<Color> gradientColors,
-            Color strokeColor,
+            SerializableColor strokeColor,
             int strokeThickness,
             shapeStyle style
         )
@@ -72,6 +72,7 @@ namespace VecEdit2D
             this.strokeThickness = strokeThickness;
             this.style = style;
         }
+
 
         public ShapeGroup(double centerx, double centery, Color primary, Color secondary)
         {
@@ -101,31 +102,31 @@ namespace VecEdit2D
         {
             if (childGroups != null)
                 foreach (Group group in childGroups)
-                group.translate(dx, dy);
+                    group.translate(dx, dy);
         }
         public virtual void rotate(double angleRad, Point rotCenter)
         {
             if (childGroups != null)
                 foreach (Group group in childGroups)
-                group.rotate(angleRad, rotCenter);
+                    group.rotate(angleRad, rotCenter);
         }
         public virtual void scale(double sx, double sy, Point scaleCenter)
         {
             if (childGroups != null)
                 foreach (Group group in childGroups)
-                group.scale(sx, sy, scaleCenter);
+                    group.scale(sx, sy, scaleCenter);
         }
         public virtual void setColor(Color color)
         {
             if (childGroups != null)
                 foreach (Group group in childGroups)
-                     group.setColor(color);
+                    group.setColor(color);
         }
         public virtual void setBorder(Color border)
         {
             if (childGroups != null)
                 foreach (Group group in childGroups)
-                     group.setBorder(border);
+                    group.setBorder(border);
         }
         public virtual void setStyle(shapeStyle style)
         {
@@ -143,7 +144,7 @@ namespace VecEdit2D
 
         public virtual ShapeGroup find(string name)
         {
-            if(this.name == name)
+            if (this.name == name)
             {
                 return this;
             }
@@ -162,7 +163,7 @@ namespace VecEdit2D
         {
             foreach (ShapeGroup group in childGroups)
             {
-                if(group.name == name)
+                if (group.name == name)
                 {
                     childGroups.Remove(group);
                     return true;
