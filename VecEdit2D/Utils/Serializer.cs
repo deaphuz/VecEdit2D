@@ -13,6 +13,9 @@ using System.Windows;
 using VecEdit2D;
 using System.Xml;
 using System.Windows.Markup;
+using System.Windows.Xps.Packaging;
+using System.Windows.Documents;
+using System.Windows.Xps;
 
 namespace VecEdit2D
 {
@@ -197,40 +200,11 @@ namespace VecEdit2D
         }
 
 
-        //export WPF canvas to svg
         public void SaveToXaml(Canvas data, string filePath)
         {
             string xaml = XamlWriter.Save(data);
 
             File.WriteAllText(filePath, xaml);
         }
-    }
-
-    public class SvgSerializer : Serializer
-    {
-        //template method
-        public override void Serialize(Object data)
-        {
-            string filePath = "";
-            try
-            {
-                filePath = OpenSaveDialog("xml");
-            }
-            catch (Exception e)
-            {
-                { System.Windows.MessageBox.Show("Failed to export image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            }
-
-            try
-            {
-                //SaveToXml((Canvas)data, filePath);
-            }
-            catch (Exception e)
-            {
-                { System.Windows.MessageBox.Show("Failed to export image", "Error", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            }
-
-        }
-
     }
 }
